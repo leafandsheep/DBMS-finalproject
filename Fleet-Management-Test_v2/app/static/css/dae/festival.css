@@ -1,0 +1,18 @@
+@media screen and (min-width: 0px) and (max-width: 768px) {
+    /*.ui-datepicker-inline.ui-datepicker.ui-widget.ui-widget-content.ui-helper-clearfix.ui-corner-all.ui-datepicker-multi-3.ui-datepicker-multi {
+        width: 92vw!important;
+    }*/
+    #festival_date {
+        width: 90vw!important;
+    }
+    .ui-datepicker-group {
+        width: 90vw!important;
+    }
+}
+
+@media screen and (min-width: 320px) and (max-width: 768px) {
+    .ui-datepicker-inline.ui-datepicker.ui-widget.ui-widget-content.ui-helper-clearfix.ui-corner-all.ui-datepicker-multi-3.ui-datepicker-multi {
+        width: 93vw!important;
+    }
+}
+

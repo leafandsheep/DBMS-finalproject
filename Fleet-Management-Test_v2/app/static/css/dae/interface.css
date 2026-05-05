@@ -1,0 +1,1734 @@
+/*clandler css*/
+
+@media (min-width: 992px) {
+    section.dashboard-counts span.number {
+        font-size: 1.2rem;
+        font-weight: bold;
+    }
+}
+
+input.form-control-custom[disabled]+label::before,
+input.form-control-custom[disabled]+label::after {
+    border: 0px solid #aaa;
+    cursor: not-allowed;
+}
+
+.fa-times-circle-o {
+    margin-right: 5px;
+}
+
+.fa.fa-times-circle-o.fa-2x:hover {
+    color: red;
+    font-size: 2.25em;
+    z-index: 0;
+}
+
+.alert.alert-info.alert-dismissable.col-lg-3.col-md-6.col-sm-12.alert-node_check {
+    text-align: center;
+}
+
+.alert.alert-info.alert-dismissable.col-lg-3.col-md-6.col-sm-12.update_alert-node_check {
+    text-align: center;
+}
+
+@media screen and (min-width:400px) {
+    strong.node_state_value {
+        margin: 60px;
+        text-align: center;
+    }
+}
+
+@media screen and (max-width:400px) {
+    strong.node_state_value {
+        margin: 0px;
+        text-align: center;
+    }
+}
+
+@media screen and (min-width:400px) {
+    strong.update_node_state_value {
+        margin: 60px;
+        text-align: center;
+    }
+}
+
+@media screen and (max-width:400px) {
+    strong.update_node_state_value {
+        margin: 0px;
+        text-align: center;
+    }
+}
+
+input.form-control-custom+label {
+    font-size: 0.8em;
+}
+
+.month {
+    padding: 70px 25px;
+    width: 100%;
+    background: #1abc9c;
+}
+
+
+/*分頁*/
+
+.nav-tabs .nav-item.show .nav-link,
+.nav-tabs .nav-link.active {
+    color: #464a4c;
+    background-color: #d1e0f8;
+    border-color: #ddd #ddd #fff;
+}
+
+.swal2-modal .swal2-select {
+    color: #545454;
+    font-size: inherit;
+    background: white;
+    padding: 5px 10px;
+    min-width: 40%;
+    max-width: 100%;
+}
+
+body {
+    font-family: Microsoft JhengHei;
+}
+
+button,
+input,
+optgroup,
+select,
+textarea {
+    font-size: 100%;
+    line-height: 1.15;
+    margin: 0;
+    font-family: Microsoft JhengHei;
+}
+
+i {
+    width: 20px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
+    margin-bottom: 0.5rem;
+    font-family: Microsoft JhengHei;
+    font-weight: 500;
+    line-height: 1.1;
+    color: inherit;
+}
+
+.h5.text-uppercase {
+    font-family: Microsoft JhengHei;
+}
+
+
+/*div.card.text-center.node_frame:hover {
+    box-shadow: 4px 4px 12px 4px rgba(20%, 20%, 40%, 0.5);
+}
+div.card.text-center.group_frame:hover {
+    box-shadow: 4px 4px 12px 4px rgba(20%, 20%, 40%, 0.5);
+}
+div.card.text-center.scene_frame:hover {
+    box-shadow: 4px 4px 12px 4px rgba(20%, 20%, 40%, 0.5);
+}
+div.card .text-center:hover {
+    box-shadow: 4px 4px 12px 4px rgba(20%, 20%, 40%, 0.5);
+}*/
+
+
+/*.card.text-center:hover {
+    box-shadow: 4px 4px 12px 4px rgba(20%, 20%, 40%, 0.5);
+}*/
+
+
+/*.weekday {
+    margin: 0;
+    padding: 10px 0;
+    background-color: #ddd;
+}*/
+
+.fa.fa-times.fa-2x.float-right:hover {
+    color: red;
+    /*font-size: 2.25em;*/
+    transform: scale(1.25, 1.25);
+    /*border-style: solid;*/
+    /*width: auto;*/
+}
+
+.fa.fa-times.fa-2x.float-right {
+    margin-right: 5px;
+}
+
+[type=reset],
+[type=submit],
+button,
+html [type=button] {
+    -webkit-appearance: none;
+}
+
+.days {
+    padding: 10px 0;
+    background: #eee;
+    margin: 0;
+}
+
+@media screen and (min-width:400px) {
+    #new_start_time {
+        width: 25%
+    }
+    #new_end_time {
+        width: 25%
+    }
+}
+
+@media screen and (max-width:400px) {
+    #new_start_time {
+        width: 100%
+    }
+    #new_end_time {
+        width: 100%
+    }
+}
+
+
+/*.days tr td {
+    list-style-type: none;
+    display: inline-block;
+    width: 13.6%;
+    text-align: center;
+    margin-bottom: 5px;
+    font-size: 12px;
+    color: #777;
+}*/
+
+.update_timepicker {
+    width: 25%;
+    display: inline;
+}
+
+@media screen and (max-width:680px) {
+    ul.side-main-menu li:not(:first-child) {
+        display: none;
+    }
+    ul.side-main-menu li.icon {
+        float: right;
+        display: inline-block;
+    }
+}
+
+@media screen and (max-width:680px) {
+    ul.side-main-menu.responsive {
+        position: relative;
+    }
+    ul.side-main-menu.responsive li.icon {
+        position: absolute;
+        right: 0;
+        top: 0;
+    }
+    ul.side-main-menu.responsive li {
+        float: none;
+        display: inline;
+    }
+    ul.side-main-menu.responsive li a {
+        display: block;
+        text-align: left;
+    }
+}
+
+
+/*body {
+    margin: 0;
+}
+
+.side-menu.list-unstyled {
+    overflow: hidden;
+    background-color: #333;
+}
+
+.topside-menu.list-unstylednav a {
+    float: left;
+    display: block;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+}
+
+.side-menu.list-unstyled a:hover {
+    background-color: #ddd;
+    color: black;
+}
+
+.active {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.side-menu.list-unstyled .icon {
+    display: none;
+}
+
+@media screen and (max-width: 600px) {
+    .side-menu.list-unstyled a:not(:first-child) {
+        display: none;
+    }
+    .side-menu.list-unstyled a.icon {
+        float: right;
+        display: block;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .side-menu.list-unstyled.responsive {
+        position: relative;
+    }
+    .side-menu.list-unstyled.responsive .icon {
+        position: absolute;
+        right: 0;
+        top: 0;
+    }
+    .side-menu.list-unstyled.responsive a {
+        float: none;
+        display: block;
+        text-align: left;
+    }
+}*/
+
+
+/*
+html,
+body {
+    height: 100%;
+    background: -webkit-radial-gradient(60% 100%, circle, #4d5965 20%, #7a838c 95%);
+    background: radial-gradient(circle at 60% 100%, #4d5965 20%, #7a838c 95%);
+    padding: 0.9375rem;
+}
+
+label {
+    font-family: "Roboto", Helvetica, Arial, sans-serif;
+    color: #fff;
+}
+
+label input {
+    margin-left: 0.625rem;
+    padding: 0.4375rem 0.3125rem;
+}
+
+p {
+    margin-bottom: 0.9375rem;
+}
+
+.wrapper {
+    display: block;
+    margin: 0.625rem 0.3125rem;
+}
+
+.wrapper.text {
+    max-width: 25rem;
+    border: solid 1px #e3e3e3;
+    padding: 0.9375rem;
+    margin-bottom: 0.9375rem;
+}
+
+input.hasDatepicker {
+    cursor: pointer;
+}
+
+.ui-datepicker {
+    border-width: 0;
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+    width: 18.5rem;
+}
+
+@media (max-width: 480px) {
+    .ui-datepicker {
+        width: 17rem;
+    }
+}
+
+.ui-datepicker.ui-corner-all {
+    border-radius: 0;
+}
+
+.ui-datepicker .ui-datepicker-header {
+    background: lightblue;
+    padding: 15px 0;
+    border-width: 0;
+}
+
+.ui-datepicker .ui-datepicker-prev,
+.ui-datepicker .ui-datepicker-next {
+    cursor: pointer;
+    top: 15px;
+}
+
+.ui-datepicker .ui-datepicker-prev span,
+.ui-datepicker .ui-datepicker-next span {
+    background: transparent;
+    width: 0px;
+    height: 0px;
+    border-width: 5px 9px;
+    border-style: solid;
+    border-color: transparent;
+    margin-top: 0;
+    top: 32%;
+}
+
+.ui-datepicker .ui-datepicker-prev span {
+    left: 59%;
+    border-right-color: #fff;
+    border-left-width: 0;
+}
+
+.ui-datepicker .ui-datepicker-next span {
+    left: 67%;
+    border-left-color: #fff;
+    border-right-width: 0;
+}
+
+.ui-datepicker .ui-datepicker-title {
+    text-shadow: none;
+}
+
+.ui-datepicker .ui-datepicker-title select {
+    border: 0;
+    height: 27px;
+    width: 45%;
+    width: calc(49% - 5px);
+    font-family: "Roboto", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    color: #414141;
+    padding-left: 5px;
+}
+
+.ui-datepicker .ui-datepicker-title select:focus {
+    outline: none;
+}
+
+.ui-datepicker .ui-datepicker-title .ui-datepicker-month {
+    margin-right: 5px;
+}
+
+.ui-datepicker .ui-datepicker-title .ui-datepicker-year {
+    margin-left: 5px;
+}
+
+.ui-datepicker .ui-datepicker-buttonpane button {
+    -webkit-transition: all 0.15s ease-in-out;
+    -moz-transition: all 0.15s ease-in-out;
+    transition: all 0.15s ease-in-out;
+    background: #fff;
+    border: 0px;
+    font-weight: 600;
+    margin: 10px 5px;
+    padding: 5px 12px;
+    font-size: 16px;
+    text-transform: uppercase;
+}
+
+.ui-datepicker .ui-datepicker-buttonpane button[data-handler="today"]:hover,
+.ui-datepicker .ui-datepicker-buttonpane button[data-handler="today"]:active {
+    opacity: 1;
+    color: #4f4f4f;
+}
+
+.ui-datepicker .ui-datepicker-buttonpane button[data-handler="hide"]:hover,
+.ui-datepicker .ui-datepicker-buttonpane button[data-handler="hide"]:active {
+    color: #dd5044;
+}
+
+.ui-datepicker table {
+    margin-top: 0.625rem;
+    font-family: "Roboto", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+}
+
+.ui-datepicker th {
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.ui-datepicker th.ui-datepicker-week-end * {
+    color: #dd5044;
+}
+
+.ui-datepicker td span,
+.ui-datepicker td a {
+    padding: 0.4em 0.2em;
+    font-size: 14px;
+    text-align: center;
+}
+
+.ui-datepicker td .ui-state-default.ui-state-hover {
+    border-color: transparent;
+    text-shadow: none;
+    background: #ededed;
+    font-weight: normal;
+    color: inherit;
+}
+
+.ui-datepicker td .ui-state-highlight {
+    border-color: transparent;
+}
+
+.ui-datepicker td .ui-state-active,
+.ui-datepicker td .ui-state-active.ui-state-highlight,
+.ui-datepicker td .ui-state-active.ui-state-hover {
+    text-shadow: none;
+    font-weight: 400;
+    background: gold;
+    border-color: gold;
+    color: #fff;
+}
+
+.ui-datepicker td.ui-datepicker-week-end * {
+    color: #949494;
+}
+
+.ui-datepicker td.ui-datepicker-week-end .ui-state-active {
+    color: #fff;
+}
+
+.ui-datepicker .ui-datepicker-today {
+    border: solid 1px #dbdbdb;
+}
+
+.ui-datepicker .ui-widget-content {
+    border-color: #e3e3e3;
+}
+
+.ui-datepicker .ui-widget-content [type="button"] {
+    font-size: 14px;
+    font-family: "Roboto", Helvetica, Arial, sans-serif;
+}
+
+.ui-datepicker-trigger {
+    margin: 10px;
+}
+
+.datepicker.sample {
+    margin-left: 50px;
+}
+*/
+
+
+/*特別節日 CSS*/
+
+.dtepicker-calendar {
+    display: none;
+}
+
+
+/*@media (min-width: 992px) {
+    .ui-datepicker-group {
+        width: $(window).width();
+    }
+}*/
+
+.ui-selected-highlight {
+    border: 10px;
+    background: red;
+    color: #777620;
+}
+
+.ui-selected-highlight>.ui-state-default {
+    border: 1px solid #f66c6c;
+    background: #f66c6c;
+    color: #363636;
+}
+
+.ui-datepicker td {
+    border: 10px;
+    padding: 1px;
+}
+
+.festival {
+    font-size: 15px;
+}
+
+.timetable {
+    font-size: 15px;
+}
+
+.center {
+    text-align: center;
+}
+
+
+/*schedule_time_button*/
+
+.btn-info:active,
+.btn-info.active,
+.show>.btn-info.dropdown-toggle {
+    color: #fff;
+    background-color: #0275d8;
+    background-image: none;
+    border-color: #0275d8;
+}
+
+
+/*label.btn.before{
+      background-color: #ccc;
+}*/
+
+
+/*label.btn.before .group_state_change {
+    background-color: lightgreen;
+}*/
+
+.btn.btn-gray {
+    background-color: #ccc;
+}
+
+
+/*.group_state_change{
+    background-color: lightgreen;
+}*/
+
+button,
+html input[type="button"],
+input[type="reset"],
+input[type="submit"] {
+    -webkit-appearance: button;
+    cursor: pointer;
+}
+
+@media (min-width: 992px) {}
+
+.container-fluid {
+    padding: 0 0px;
+}
+
+.btn {
+    cursor: pointer;
+}
+
+.real-control.card {
+    height: 100%;
+    border: none;
+    background: #fff;
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+    border-radius: 0;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    vertical-align: top;
+    /*width: 56px;*/
+    /* height: 20px; */
+    background-color: transparent;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    cursor: pointer;
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+    overflow: hidden;
+}
+
+.dialog.container-fluid {
+    padding: 0 0px;
+}
+
+a.btn-warning.update {
+    text-decoration: none;
+    background-color: #f0ad4e;
+    font-family: Microsoft JhengHei;
+    font-weight: bold;
+    border-radius: 10%;
+}
+
+
+/********************以上是用電資訊demand dialog *********************************/
+
+a:focus,
+a:hover {
+    color: black;
+    text-decoration: underline;
+}
+
+a {
+    color: #337ab7;
+    text-decoration: none;
+}
+
+.card {
+    width: 100%;
+    height: 100%;
+    /* border: none; */
+    background: #fff;
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+    border-radius: 0;
+}
+
+h1.page-header {
+    font-size: 2.5rem
+}
+
+.section-padding {
+    padding: 50px 0;
+}
+
+.breadcrumb {
+    padding: .75rem 1rem;
+    margin-bottom: 1rem;
+    list-style: none;
+    background-color: #e8e7e7;
+    border-radius: .25rem;
+}
+
+
+/******************gateway頁面 *********************************/
+
+
+/*.sidenav-header-inner.text-center {
+    text-align: center;
+}*/
+
+.section-padding {
+    padding: 0;
+}
+
+@media (min-width: 992px) {
+    .container-fluid {
+        padding: 0 50px;
+    }
+}
+
+.demend_info.nav-pills>li.active>a,
+.nav-pills>li.active>a:hover,
+.nav-pills power>li.active>a:focus {
+    background-color: #61ca42;
+}
+
+.dialog.dialog_model {
+    background-color: white;
+}
+
+.power_info {
+    background-color: #ff5454;
+    color: black;
+    font-family: Microsoft JhengHei;
+    font-size: 18px;
+    text-align: center;
+}
+
+.modal-header {
+    font-family: Microsoft JhengHei;
+    font-size: 18px;
+    text-align: center;
+    font-weight: bold;
+    padding: 0;
+}
+
+.col-sm-12#diagramframe {
+    padding-right: 0px;
+    padding-left: 0px;
+}
+
+.real_power {
+    border-radius: 10px;
+    text-align: center;
+}
+
+.real_demandtext {
+    font-family: Microsoft JhengHei;
+    font-size: 20px;
+    text-align: center;
+    font-weight: bold;
+}
+
+span.realtime_power {
+    font-size: 28px;
+}
+
+h4.modal-title {
+    font-family: Microsoft JhengHei;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.list-group-item {
+    padding: 5px;
+    text-align: center;
+    font-size: 15px;
+}
+
+.ui-dialog .ui-dialog-title {
+    float: left;
+    margin: .1em 0;
+    white-space: nowrap;
+    width: 90%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-family: Microsoft JhengHei;
+    color: black;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+#nowDateTimeSpan-demend {
+    padding: 10px 10px 10px 10px;
+    position: absolute;
+    top: -5px;
+    color: dimgray;
+}
+
+input.btn_loadGraph {
+    border: 2px solid #456879;
+    border-radius: 20px;
+    height: 40px;
+    /* padding: 18px; */
+    width: 8%;
+    outline: none;
+}
+
+input.btn_loadGraph:hover {
+    border: 2px solid red;
+}
+
+
+/*dialog*/
+
+.ui-dialog {
+    z-index: 1000;
+}
+
+dialog.dialog_model {
+    background-color: white;
+}
+
+.dialog_model {
+    background-color: white;
+}
+
+.ui-dialog .ui-dialog-buttonpane {
+    background-color: white;
+    margin-top: 0em;
+}
+
+.col-sm-10.diagramframe {
+    position: relative;
+    min-height: 1px;
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+.modal-header.ui-dialog-content.ui-widget-content {
+    background-color: white;
+}
+
+div.dialog_model.ui-dialog .ui-dialog-content {
+    padding-top: 0em;
+    padding-right: 0em;
+    padding-bottom: 0em;
+    padding-left: 0em;
+}
+
+.info-box .count {
+    margin-top: -10px;
+    font-size: 25px;
+    font-weight: 700;
+}
+
+i.btn_todaily_demand {
+    color: red;
+    position: absolute;
+    top: 5px;
+    right: 7px;
+    cursor: pointer;
+    font-size: 1.5em;
+}
+
+
+/*set the 第一筆... color*/
+
+.tabpane_dailyPeak_page {
+    display: none;
+}
+
+.btn_todaily_demand {
+    color: red;
+    cursor: pointer;
+}
+
+
+/*.dropdown.info_bottom{
+        position: absolute;
+        bottom: 0px;
+}*/
+
+.card.text-center:hover {
+    box-shadow: 4px 4px 12px 4px rgba(20%, 20%, 40%, 0.5);
+    background-color: cornsilk;
+}
+
+a.btn {
+    text-decoration: none;
+    background-color: #a6ec7e;
+    font-family: Microsoft JhengHei;
+    font-weight: bold;
+}
+
+a.btn.node_info {
+    /*position: relative;
+    flex-flow: flex;
+    margin-bottom: 0px;*/
+    text-decoration: none;
+    background-color: #afd5f6;
+    font-family: Microsoft JhengHei;
+    font-weight: bold;
+}
+
+.ui-dialog-titlebar {
+    background-color: lightblue;
+    background-image: none;
+    color: #000;
+}
+
+.ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-icon-only.ui-dialog-titlebar-close {
+    background-image: none;
+    color: #000;
+}
+
+.ui-widget-header {
+    border: 1px solid lightblue;
+}
+
+.nav-pills>li.active>a,
+.nav-pills>li.active>a:hover,
+.nav-pills>li.active>a:focus {
+    background-color: #61ca42;
+}
+
+.nav-pills>li.active>a:hover {
+    background-color: black;
+}
+
+input.datetime {
+    /*margin-left: 7px;*/
+    /*border: none;*/
+    text-decoration: underline;
+    border: 2px solid #456879;
+    border-radius: 20px;
+    height: 40px;
+    padding: 18px;
+    width: 26%;
+    /*background: lightblue;*/
+    text-align: center;
+    color: #000;
+    font-family: Microsoft JhengHei;
+}
+
+input.datetime:focus {
+    outline: none;
+}
+
+input.datetime:hover {
+    border: 2px solid red;
+}
+
+div.dateframe {
+    margin: 0 13px;
+    text-align: center;
+    padding: 5px;
+}
+
+i.btn_toSettingPage {
+    position: absolute;
+    top: 5px;
+    right: 7px;
+    cursor: pointer;
+    font-size: 1.5em;
+}
+
+i.btn_to_page_meterList {
+    cursor: pointer;
+    position: absolute;
+    top: -2px;
+    right: -9px;
+    color: red;
+    font-size: 1.5em;
+}
+
+h4.real_demandtext {
+    font-size: 18px;
+    font-family: Microsoft JhengHei;
+    color: #000;
+}
+
+input.cmn-toggle-round+label {
+    padding: 2px;
+    /*width: 56px;*/
+    height: 25px;
+    background-color: #dddddd;
+    border-radius: 60px;
+}
+
+input.cmn-toggle-round+label:before,
+input.cmn-toggle-round+label:after {
+    display: block;
+    position: absolute;
+    top: 1px;
+    left: 1px;
+    bottom: 1px;
+    content: "";
+}
+
+input.cmn-toggle-round+label:before {
+    right: 1px;
+    background-color: #f1f1f1;
+    border-radius: 60px;
+    transition: background 0.4s;
+}
+
+input.cmn-toggle-round+label:after {
+    width: 21px;
+    background-color: #fff;
+    border-radius: 100%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    transition: margin 0.4s;
+}
+
+input.cmn-toggle-round:checked+label:before {
+    background-color: #8ce196;
+}
+
+input.cmn-toggle-round:checked+label:after {
+    margin-left: 33px;
+}
+
+
+/*radio button*/
+
+.cmn-toggle {
+    position: absolute;
+    margin-left: -9999px;
+    visibility: hidden;
+}
+
+.cmn-toggle+label {
+    display: block;
+    position: relative;
+    cursor: pointer;
+    outline: none;
+    user-select: none;
+}
+
+.switch#gateway_change {
+    height: 25px;
+}
+
+
+/*set 最高需量用電折線圖*/
+
+.demand_info.nav-pills>li.active>a,
+.nav-pills>li.active>a:hover,
+.nav-pills power>li.active>a:focus {
+    background-color: #61ca42;
+}
+
+.functionRow {
+    padding: inherit;
+}
+
+.demand_info {
+    margin-top: 10px;
+}
+
+input.datetime.hasDatepicker>table.ui-datepicker-calendar {
+    display: none;
+    font: inherit;
+    color: gray;
+}
+
+ul,
+ol {
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.ui-datepicker select.ui-datepicker-month,
+.ui-datepicker select.ui-datepicker-year {
+    color: black;
+}
+
+
+/*Demand Setting*/
+
+.form-control[readonly] {
+    cursor: inherit;
+}
+
+div#page-wrapper {
+    background-color: white;
+}
+
+.ui-spinner .ui-icon {}
+
+.btn_setting_gateway:focus {
+    outline: none;
+}
+
+.dialog.dialog_meterList {
+    display: none;
+    background-color: white;
+    padding: 3%;
+    width: auto;
+    /*height: 649.4px;*/
+}
+
+div.page_newMeter {
+    display: none;
+    background-color: white;
+    width: auto;
+    height: 649.4px;
+}
+
+i.btn_toMeterList {
+    color: red;
+    position: absolute;
+    top: 5px;
+    right: 7px;
+    cursor: pointer;
+    font-size: 1.5em;
+}
+
+.btn.btn-success.open_setting.btn {
+    display: inline-block;
+    padding: 6px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
+.btn:focus,
+.btn:active:focus,
+.btn.active:focus,
+.btn.focus,
+.btn:active.focus,
+.btn.active.focus {
+    outline: thin dotted;
+    outline: 5px auto -webkit-focus-ring-color;
+    outline-offset: -2px;
+}
+
+.btn:hover,
+.btn:focus,
+.btn.focus {
+    color: #333;
+    text-decoration: none;
+}
+
+.btn:active,
+.btn.active {
+    background-image: none;
+    outline: 0;
+    -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, .125);
+    box-shadow: inset 0 3px 5px rgba(0, 0, 0, .125);
+}
+
+
+/*realtime_control_setting*/
+
+div.dialog_control {
+    display: none;
+    background-color: white;
+}
+
+.dialog.dialog_control {
+    background-color: white;
+}
+
+div.panel_switch {
+    min-height: 0px;
+    max-height: none;
+    height: 749.4px;
+    background-color: white;
+    display: inline-block;
+    float: left;
+    width: 45%;
+}
+
+div.panel_available {
+    min-height: 0px;
+    max-height: none;
+    height: 749.4px;
+    background-color: white;
+    display: inline-block;
+    float: right;
+    width: 45%;
+    margin-right: 20px;
+}
+
+.checkbox.disabled label {
+    cursor: not-allowed;
+}
+
+.btn.btn-danger.delete {
+    background-color: red;
+    border-radius: 10%;
+}
+
+
+/*.ui-dialog-buttonpane.ui-widget-content.ui-helper-clearfix{
+    height:50px;
+}*/
+
+
+/* Set height of the grid so .sidenav can be 100% (adjust if needed) */
+
+.row.content {
+    height: 400px
+}
+
+
+/* Set gray background color and 100% height */
+
+.sidenav {
+    background-color: #f1f1f1;
+    height: 100%;
+    background-color: white;
+}
+
+
+/* On small screens, set height to 'auto' for sidenav and grid */
+
+@media screen and (max-width: 50px) {
+    .sidenav {
+        height: auto;
+        padding: 15px;
+    }
+    .row.content {
+        height: auto;
+    }
+}
+
+
+/*line-chart */
+
+td {
+    border: solid 1px;
+}
+
+#chart svg {
+    width: 100%;
+    height: 300px;
+}
+
+
+/*bar chart*/
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+}
+
+.bar {
+    fill: orange;
+}
+
+.bar:hover {
+    fill: orangered;
+}
+
+.x.axis path {
+    display: none;
+}
+
+.d3-tip {
+    line-height: 1;
+    font-weight: bold;
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    border-radius: 2px;
+}
+
+
+/* Creates a small triangle extender for the tooltip */
+
+.d3-tip:after {
+    box-sizing: border-box;
+    display: inline;
+    font-size: 10px;
+    width: 100%;
+    line-height: 1;
+    color: rgba(0, 0, 0, 0.8);
+    content: "\25BC";
+    position: absolute;
+    text-align: center;
+}
+
+
+/* Style northward tooltips differently */
+
+.d3-tip.n:after {
+    margin: -1px 0 0 0;
+    top: 100%;
+    left: 0;
+}
+
+
+/*用電折線圖*/
+
+
+/*需量高峰次數圖*/
+
+#tabpane_peakPeriod1 {
+    position: relative;
+    width: 100%;
+    height: 400px;
+}
+
+#tabpane_peakPeriod2 {
+    position: relative;
+    width: 100%;
+    height: 400px;
+}
+
+#tabpane_peakPeriod3 {
+    position: relative;
+    width: 100%;
+    height: 400px;
+}
+
+
+/*nv.d3.css*/
+
+svg {
+    width: 100%;
+    height: 100%;
+    position: center;
+}
+
+path.slice {
+    stroke-width: 2px;
+}
+
+text {
+    font-family: "Microsoft JhengHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+polyline {
+    opacity: .3;
+    stroke: black;
+    stroke-width: 2px;
+    fill: none;
+}
+
+.labelValue {
+    font-family: "Microsoft JhengHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 60%;
+    opacity: .5;
+}
+
+label {
+    font-family: "Microsoft JhengHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: normal;
+}
+
+.toolTip {
+    font-family: "Microsoft JhengHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    position: absolute;
+    display: none;
+    width: auto;
+    height: auto;
+    background: none repeat scroll 0 0 white;
+    border: 0 none;
+    border-radius: 8px 8px 8px 8px;
+    box-shadow: -3px 3px 15px #888888;
+    color: black;
+    font: 12px "Microsoft JhengHei";
+    padding: 5px;
+    text-align: center;
+}
+
+.legend {
+    font-family: "Microsoft JhengHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 60%;
+}
+
+rect {
+    stroke-width: 2;
+}
+
+
+/*影響圖表字型*/
+
+
+/*text {
+    font: 10px sans-serif;
+}*/
+
+text.value {
+    font-size: 200%;
+    fill: white;
+}
+
+text.label {
+    font-size: 100%;
+}
+
+.axis text {
+    font: 10px "Microsoft JhengHei";
+}
+
+.axis path {
+    fill: none;
+    stroke: #000;
+}
+
+.axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+}
+
+.axis .tick line {
+    stroke-width: 1;
+    stroke: rgba(0, 0, 0, 0.2);
+}
+
+.axisHorizontal path {
+    fill: none;
+}
+
+.axisHorizontal line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+}
+
+.axisHorizontal .tick line {
+    stroke-width: 1;
+    stroke: rgba(0, 0, 0, 0.2);
+}
+
+.bar {
+    fill: steelblue;
+    fill-opacity: .9;
+}
+
+.x.axis path {
+    display: none;
+}
+
+
+/*Web 圖表CSS設計*/
+
+.footer {
+    padding-top: 40px;
+    padding-bottom: 40px;
+    margin-top: 40px;
+    border-top: 1px solid #eee;
+}
+
+
+/* Main marketing message and sign up button */
+
+.jumbotron {
+    text-align: center;
+    background-color: transparent;
+}
+
+.jumbotron .btn {
+    padding: 14px 24px;
+    font-size: 21px;
+}
+
+
+/* Customize the nav-justified links to be fill the entire space of the .navbar */
+
+.nav-justified {
+    background-color: #eee;
+    border: 1px solid #ccc;
+    /* border-radius: 5px; */
+}
+
+.nav-justified>li>a {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    margin-bottom: 0;
+    font-weight: bold;
+    color: #777;
+    text-align: center;
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f5f5f5', endColorstr='#e5e5e5', GradientType=0);
+    /* IE6-9 */
+    background-repeat: repeat-x;
+    /* Repeat the gradient */
+    border-bottom: 1px solid #d5d5d5;
+}
+
+.nav-justified>.active>a,
+.nav-justified>.active>a:hover,
+.nav-justified>.active>a:focus {
+    background-color: #ddd;
+    background-image: none;
+    -webkit-box-shadow: inset 0 3px 7px rgba(0, 0, 0, .15);
+    box-shadow: inset 0 3px 7px rgba(0, 0, 0, .15);
+}
+
+.nav-justified>li:first-child>a {
+    border-radius: 5px 5px 0 0;
+}
+
+.nav-justified>li:last-child>a {
+    border-bottom: 0;
+    border-radius: 0 0 5px 5px;
+}
+
+@media (min-width: 768px) {
+    .nav-justified {
+        max-height: 52px;
+    }
+    .nav-justified>li>a {
+        border-right: 1px solid #d5d5d5;
+        border-left: 1px solid #fff;
+    }
+    .nav-justified>li:first-child>a {
+        border-left: 0;
+        border-radius: 5px 0 0 5px;
+    }
+    .nav-justified>li:last-child>a {
+        border-right: 0;
+        border-radius: 0 5px 5px 0;
+    }
+}
+
+
+/* Responsive: Portrait tablets and up */
+
+@media screen and (min-width: 768px) {
+    /* Remove the padding we set earlier */
+    .masthead,
+    .marketing,
+    .footer {
+        padding-right: 0;
+        padding-left: 0;
+    }
+}
+
+
+/* 滑鼠滑入展開次選單*/
+
+.dropdown-submenu {
+    position: relative;
+}
+
+ul.dropdown-menu li:hover>ul {
+    /* 滑鼠滑入展開次選單*/
+    display: block;
+}
+
+.dropdown-submenu .dropdown-menu {
+    top: 0;
+    left: 100%;
+    margin-top: -1px;
+}
+
+.page_elerecordList {
+    display: none;
+    background-color: white;
+    padding: 4%;
+    width: auto;
+    height: auto;
+}
+
+
+/*搜尋用電紀錄*/
+
+.page_searchEleRecordList {
+    display: none;
+    background-color: white;
+    padding: 4%;
+    width: auto;
+    height: auto;
+}
+
+
+/*開機設定*/
+
+/*.page_meterList {
+    display: none;
+    background-color: white;
+    padding: 4%;
+    width: auto;
+    height: 649.4px;
+}
+*/
+
+/*即時控制頁面*/
+
+.dialog_control {
+    display: none;
+    background-color: white;
+}
+
+
+/*.panel_switch {
+    min-height: 0px;
+    max-height: none;
+    height: 749.4px;
+    background-color: white;
+    display: inline-block;
+    float: left;
+    width: 45%;
+}*/
+
+.panel_available {
+    min-height: 0px;
+    max-height: none;
+    height: 749.4px;
+    background-color: white;
+    display: inline-block;
+    float: left;
+    width: 45%;
+}
+
+.form-control[disabled],
+.form-control[readonly],
+fieldset[disabled] .form-control {
+    background-color: #eeeeee;
+}
+
+.form-control[readonly] {
+    cursor: inherit;
+}
+
+
+/*一般設定*/
+
+.dialog.dialog_gatewaySetting {
+    background-color: white;
+}
+
+div.dialog_gatewaySetting {
+    display: none;
+    position: absolute;
+    background-color: white;
+    padding: 4%;
+    width: auto;
+    height: 649.4px;
+}
+
+.red-bg {
+    color: #fff;
+    background: #d95043;
+    background-color: #d95043;
+}
+
+.red-bg:hover {
+    color: #fff;
+    background: #d95043;
+    background-color: #d95043;
+    box-shadow: 4px 4px 12px 4px rgba(20%, 20%, 40%, 0.5);
+}
+
+.green-bg {
+    color: #fff;
+    background: #26c281;
+    background-color: #26c281;
+}
+
+.blue-bg {
+    color: #fff;
+    background: #57889c;
+    background-color: #57889c;
+}
+
+.page-header {
+    margin: 12px 0 20px;
+    border-bottom: none;
+    opacity: 0.7;
+    text-transform: uppercase;
+}
+
+input.cmn-toggle-round+label {
+    padding: 2px;
+    width: 52px;
+    height: 20px;
+    background-color: #dddddd;
+    border-radius: 60px;
+}
+
+.cmn-toggle+label {
+    display: block;
+    position: relative;
+    cursor: pointer;
+    outline: none;
+    user-select: none;
+}
+
+label {
+    font-family: "Microsoft JhengHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: normal;
+}
+
+input.cmn-toggle-round+label:before {
+    right: 1px;
+    background-color: #f1f1f1;
+    border-radius: 60px;
+    transition: background 0.4s;
+}
+
+input.cmn-toggle-round+label:before,
+input.cmn-toggle-round+label:after {
+    display: block;
+    position: absolute;
+    top: 1px;
+    left: 1px;
+    bottom: 1px;
+    content: "";
+}
+
+input.cmn-toggle-round+label:after {
+    width: 21px;
+    background-color: #fff;
+    border-radius: 100%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    transition: margin 0.4s;
+}
+
+input.cmn-toggle-round+label:before,
+input.cmn-toggle-round+label:after {
+    display: block;
+    position: absolute;
+    top: 1px;
+    left: 1px;
+    bottom: 1px;
+    content: "";
+}
+
+input.cmn-toggle-round:checked+label:before {
+    background-color: #8ce196;
+}

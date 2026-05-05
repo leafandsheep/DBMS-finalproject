@@ -1,0 +1,226 @@
+/*section#modalstyle {
+  display: none;
+  position: fixed;
+  opacity: 1;
+  z-index: 11000;
+  left: 50%;
+  margin-left: -107.5px;
+  top: 100px;
+}*/
+
+@media screen and (min-width: 0px) and (max-width: 700px) {
+  form.login_css {
+    background: white;
+
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.7);
+    font-family: lato;
+    position: relative;
+    color: #333;
+    border-radius: 10px;
+    width: 200%;
+    left: -30%;
+  }
+}
+@media screen and  (min-width: 700px) {
+  form.login_css {
+    background: white;
+    width: 100%;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.7);
+    font-family: lato;
+    position: relative;
+    color: #333;
+    border-radius: 10px;
+    left: 10%;
+  }
+}
+form.login_css header {
+  background: #FF3838;
+  padding: 30px 20px;
+  color: white;
+  font-size: 1.2em;
+  font-weight: 600;
+  border-radius: 10px 10px 0 0;
+}
+
+form.login_css label {
+  margin-left: 20px;
+  display: inline-block;
+  margin-top: 30px;
+  margin-bottom: 5px;
+  position: relative;
+}
+
+form.login_css label span {
+  color: #FF3838;
+  font-size: 2em;
+  position: absolute;
+  left: 2.3em;
+  top: -10px;
+}
+
+form.login_css input {
+  display: block;
+  width: 78%;
+  margin-left: 20px;
+  padding: 5px 20px;
+  font-size: 1em;
+  border-radius: 3px;
+  outline: none;
+  border: 1px solid #ccc;
+}
+
+form.login_css .help {
+  margin-left: 20px;
+  font-size: 0.8em;
+  color: #777;
+}
+
+form.login_css button {
+  position: relative;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  left: 50%;
+  transform: translate(-50%, 0);
+  font-family: inherit;
+  color: white;
+  background: #FF3838;
+  outline: none;
+  border: none;
+  padding: 5px 15px;
+  font-size: 1.3em;
+  font-weight: 400;
+  border-radius: 3px;
+  box-shadow: 0px 0px 10px rgba(51, 51, 51, 0.4);
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+}
+
+form button:hover {
+  background: #ff5252;
+}
+
+#lean_overlay {
+  position: fixed;
+  z-index: 100;
+  top: 0px;
+  left: 0px;
+  height: 100%;
+  width: 100%;
+  background: #000;
+  display: none;
+}
+
+
+/*.popupContainer {
+  position: absolute;
+  width: 600px;
+  height: auto;
+  left: 45%;
+  top: 60px;
+  background: #FFF;
+}*/
+
+
+/*#modal_trigger {
+  margin: 40px auto;
+  width: 200px;
+  display: block;
+  border: 1px solid #DDD;
+  border-radius: 4px;
+}*/
+
+.btn {
+  padding: 10px 20px;
+  background: #F4F4F2;
+}
+
+.btn_red {
+  background: #ED6347;
+  color: #FFF;
+}
+
+.btn:hover {
+  background: #E4E4E2;
+}
+
+.btn_red:hover {
+  background: #C12B05;
+}
+
+a.btn {
+  color: #666;
+  text-align: center;
+  text-decoration: none;
+}
+
+a.btn_red {
+  color: #FFF;
+}
+
+.one_half {
+  width: 50%;
+  display: block;
+  float: left;
+}
+
+.one_half.last {
+  width: 45%;
+  margin-left: 5%;
+}
+
+
+/* Popup Styles*/
+
+
+/*.popupHeader {
+  font-size: 16px;
+  text-transform: uppercase;
+}
+
+.popupHeader {
+  background: #F4F4F2;
+  position: relative;
+  padding: 10px 20px;
+  border-bottom: 1px solid #DDD;
+  font-weight: bold;
+}*/
+
+.modal_close {
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding: 10px 15px;
+  cursor: pointer;
+  color: black;
+  font-size: 16px;
+}
+
+
+/*.popupBody {
+  padding: 20px;
+}*/
+
+
+/* Social Login Form */
+
+section#modal {
+  display: block;
+  position: fixed;
+  opacity: 1;
+  z-index: 11000;
+  left: 30%;
+  margin-left: -172px;
+  top: 100px;
+  width: 40%;
+}
+
+section#register_modal {
+  display: block;
+  position: fixed;
+  opacity: 1;
+  z-index: 11000;
+  left: 30%;
+  margin-left: -172px;
+  top: 100px;
+  width: 40%;
+}

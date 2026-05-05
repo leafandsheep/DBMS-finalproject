@@ -1,0 +1,21 @@
+.network-status {
+    display:inline-block;
+    vertical-align:middle;
+    line-height:42px;
+}
+
+.network-status-red {
+    color:#DC143C
+}
+
+.network-status-green {
+    color:#228B22
+}
+
+.status-red {
+    color:#DC143C
+}
+
+.status-green {
+    color:#228B22
+}

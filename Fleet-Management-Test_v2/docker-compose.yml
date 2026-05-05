@@ -1,0 +1,22 @@
+services:
+  web:
+    build: .
+    container_name: warehouse_web
+    ports:
+      - "5000:5000"
+    environment:
+      - CONFIG_FILE=/app/docker_config.ini
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mysql:8.0
+    container_name: warehouse_mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+      - ./warehouse_management.sql:/docker-entrypoint-initdb.d/warehouse_management.sql
+    ports:
+      - "3307:3306"

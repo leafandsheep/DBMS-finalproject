@@ -1,0 +1,14 @@
+.no-sidebar {
+    width: 100%;
+}
+
+nav.sidebar-hide {
+    left: -200px;
+}
+
+@media (max-width: 1200px) {
+
+    nav.sidebar-hide {
+        left: -70px;
+    }
+}

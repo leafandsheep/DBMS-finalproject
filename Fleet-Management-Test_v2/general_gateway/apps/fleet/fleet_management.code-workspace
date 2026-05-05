@@ -1,0 +1,11 @@
+{
+	"folders": [
+		{
+			"path": "../../.."
+		},
+		{
+			"path": "../../../../indoor_position"
+		}
+	],
+	"settings": {}
+}

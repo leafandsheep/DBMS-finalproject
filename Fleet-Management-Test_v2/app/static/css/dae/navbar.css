@@ -1,0 +1,75 @@
+span, label, h1, h2, h3, h4, h5, div, body, html, option, select, button {
+    font-family: "Microsoft JhengHei";
+}
+span {
+    font-size: 14px;
+}
+
+#hello {
+    font-size: 13px;
+    font-weight: bold;
+    color: #BAB8B4;
+}
+
+#side-main-menu .svg-inline--fa {
+    font-size: 16px;
+}
+
+.user-name {
+    font-size: 14px;
+    color: #FFFFFF;
+    font-weight: bold;
+}
+
+nav.side-navbar .sidenav-header {
+    background: #292929;
+}
+
+nav.side-navbar {
+    background: #292929;
+}
+
+nav.side-navbar a:focus, nav.side-navbar a:hover, nav.side-navbar a[aria-expanded="true"] {
+    background: #292929;
+    color: #33B35A;
+}
+
+nav.side-navbar li ul.collapse a:hover {
+    background: #1B1B1B;
+    color: #33B35A;
+}
+
+nav.side-navbar li ul {
+    background: #1B1B1B;
+}
+
+nav.side-navbar li.active a {
+    background: #1B1B1B;
+    color: #33B35A;
+    font-weight: bold;
+}
+
+nav.side-navbar i {
+    font-size: 20px;
+}
+
+.nicescroll-cursors {
+    background-color: rgb(248, 244, 244);
+}
+
+nav.navbar a.menu-btn, nav.navbar {
+    background-color: #ffffff;
+    color: black;
+}
+
+nav.navbar a {
+    color: black;
+}
+
+.fa-home, .fa-sign-out-alt {
+    font-size: 20px;
+}
+
+.page-selected {
+    color: rgb(53, 180, 92) !important;
+}

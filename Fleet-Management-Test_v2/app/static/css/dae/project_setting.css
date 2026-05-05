@@ -1,0 +1,42 @@
+.shadow-none {
+    box-shadow: none !important;
+    border-radius: 0;
+}
+
+.shadow-sm {
+    box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.349019607843137);
+}
+
+.project-card-div .card-header{
+    height: 45px;
+    font-size: 20px;
+}
+
+.rounded-lg {
+    border-radius: 10px;
+}
+
+.project-thead {
+    background-color: #fafafa;
+}
+
+.btn-trash {
+    color: #d9534f;
+
+}
+.btn-trash:hover {
+    color: #b12c28;
+}
+
+.times-size {
+    font-size: 35px;
+    font-weight:bold;
+}
+
+#projectSettingModalLabel, #projectDeleteModalLabel {
+    font-size: 20px;
+}
+
+#select-replace-project {
+    font-size: 16px !important;
+}

@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>商品倉儲管理系統</title>
+  <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f4efe7;
+      --surface: #fffaf4;
+      --card: #ffffff;
+      --ink: #1f2933;
+      --muted: #6b7280;
+      --accent: #aa5a2c;
+      --accent-dark: #7a3d1a;
+      --ok: #2f855a;
+      --warn: #c05621;
+      --danger: #c53030;
+      --line: #e7d9ca;
+    }
+
+    body {
+      background:
+        radial-gradient(circle at top left, rgba(170, 90, 44, 0.12), transparent 28%),
+        linear-gradient(180deg, #f7f1e8 0%, #f3ece3 100%);
+      color: var(--ink);
+      font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+      min-height: 100vh;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, rgba(122, 61, 26, 0.95), rgba(170, 90, 44, 0.92));
+      color: #fff;
+      border-radius: 24px;
+      padding: 2rem;
+      box-shadow: 0 20px 45px rgba(122, 61, 26, 0.18);
+    }
+
+    .hero p {
+      margin-bottom: 0;
+      color: rgba(255, 255, 255, 0.85);
+    }
+
+    .panel,
+    .metric-card,
+    .table-panel {
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid rgba(231, 217, 202, 0.9);
+      border-radius: 20px;
+      box-shadow: 0 14px 30px rgba(94, 61, 38, 0.08);
+    }
+
+    .panel,
+    .table-panel {
+      padding: 1.25rem;
+      height: 100%;
+    }
+
+    .metric-card {
+      padding: 1rem 1.25rem;
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+    }
+
+    .metric-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 18px 36px rgba(94, 61, 38, 0.14);
+      border-color: rgba(170, 90, 44, 0.35);
+      color: inherit;
+    }
+
+    .metric-card h6 {
+      color: var(--muted);
+      font-size: 0.92rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .metric-card strong {
+      font-size: 1.75rem;
+      display: block;
+    }
+
+    .section-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .section-title h3,
+    .section-title h4 {
+      font-size: 1.05rem;
+      margin: 0;
+    }
+
+    .btn-accent {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+
+    .btn-accent:hover {
+      background: var(--accent-dark);
+      border-color: var(--accent-dark);
+      color: #fff;
+    }
+
+    .badge-status {
+      border-radius: 999px;
+      padding: 0.45rem 0.7rem;
+      font-weight: 600;
+      font-size: 0.8rem;
+    }
+
+    .status-0 { background: rgba(47, 133, 90, 0.12); color: var(--ok); }
+    .status-1 { background: rgba(192, 86, 33, 0.12); color: var(--warn); }
+    .status-2 { background: rgba(197, 48, 48, 0.12); color: var(--danger); }
+
+    .table thead th {
+      border-top: 0;
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    .table tbody tr {
+      cursor: pointer;
+    }
+
+    .table tbody tr:hover {
+      background: rgba(170, 90, 44, 0.04);
+    }
+
+    .hint {
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    .toast-bar {
+      display: none;
+      padding: 0.85rem 1rem;
+      border-radius: 14px;
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+
+    .toast-success {
+      display: block;
+      background: rgba(47, 133, 90, 0.12);
+      color: var(--ok);
+    }
+
+    .toast-error {
+      display: block;
+      background: rgba(197, 48, 48, 0.12);
+      color: var(--danger);
+    }
+  </style>
+</head>
+<body>
+  <div class="container py-4 py-lg-5">
+    <section class="hero mb-4">
+      <div class="row align-items-end">
+        <div class="col-lg-8">
+          <h1 class="mb-2">模組化商品倉儲管理系統</h1>
+          <p>以商品主表、操作紀錄表、門禁紀錄表為核心，集中管理入庫、出庫與未授權離場事件。</p>
+        </div>
+        <div class="col-lg-4 mt-3 mt-lg-0 text-lg-end">
+          <div class="hint text-white-50">目前版本重點：商品管理、庫存流向、異常追蹤</div>
+        </div>
+      </div>
+    </section>
+
+    <div id="feedback" class="toast-bar"></div>
+
+    <section class="row g-3 mb-4" id="summary-grid">
+      <div class="col-md-6 col-xl-2"><a class="metric-card" href="{{ url_for('main.focus', topic='products') }}"><h6>商品總數</h6><strong id="total_products">0</strong></a></div>
+      <div class="col-md-6 col-xl-2"><a class="metric-card" href="{{ url_for('main.focus', topic='in-stock') }}"><h6>庫存中</h6><strong id="in_stock_count">0</strong></a></div>
+      <div class="col-md-6 col-xl-2"><a class="metric-card" href="{{ url_for('main.focus', topic='checked-out') }}"><h6>已結帳</h6><strong id="checked_out_count">0</strong></a></div>
+      <div class="col-md-6 col-xl-2"><a class="metric-card" href="{{ url_for('main.focus', topic='unauthorized') }}"><h6>未授權離場</h6><strong id="unauthorized_count">0</strong></a></div>
+      <div class="col-md-6 col-xl-2"><a class="metric-card" href="{{ url_for('main.focus', topic='operations') }}"><h6>操作紀錄</h6><strong id="operation_count">0</strong></a></div>
+      <div class="col-md-6 col-xl-2"><a class="metric-card" href="{{ url_for('main.focus', topic='gate-records') }}"><h6>門禁紀錄</h6><strong id="gate_record_count">0</strong></a></div>
+    </section>
+
+    <section class="row g-4 mb-4">
+      <div class="col-lg-4">
+        <div class="panel">
+          <div class="section-title">
+            <h3>商品主表管理</h3>
+            <button class="btn btn-sm btn-outline-secondary" id="reset-product-form" type="button">清空</button>
+          </div>
+          <form id="product-form">
+            <div class="mb-3">
+              <label class="form-label">商品標籤 ID</label>
+              <input class="form-control" id="tag_id" name="tag_id" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">商品名稱</label>
+              <input class="form-control" id="product_name" name="product_name" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">商品價格</label>
+              <input class="form-control" id="price" name="price" type="number" step="0.01" min="0" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">商品狀態</label>
+              <select class="form-select" id="status_code" name="status_code">
+                {% for code, label in status_labels.items() %}
+                <option value="{{ code }}">{{ label }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <button class="btn btn-accent w-100" type="submit" id="product-submit">新增商品</button>
+          </form>
+          <p class="hint mt-3 mb-0">點選下方商品列可直接載入表單並編輯。</p>
+        </div>
+      </div>
+
+      <div class="col-lg-4">
+        <div class="panel">
+          <div class="section-title">
+            <h3>入出庫操作</h3>
+          </div>
+          <form id="operation-form">
+            <div class="mb-3">
+              <label class="form-label">商品標籤 ID</label>
+              <input class="form-control" name="tag_id" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">操作類型</label>
+              <select class="form-select" name="action">
+                {% for key, label in action_labels.items() %}
+                <option value="{{ key }}">{{ label }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">操作者</label>
+              <input class="form-control" name="operator" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">操作時間</label>
+              <input class="form-control" name="timestamp" type="datetime-local">
+            </div>
+            <button class="btn btn-accent w-100" type="submit">送出操作紀錄</button>
+          </form>
+        </div>
+      </div>
+
+      <div class="col-lg-4">
+        <div class="panel">
+          <div class="section-title">
+            <h3>門禁事件記錄</h3>
+          </div>
+          <form id="gate-form">
+            <div class="mb-3">
+              <label class="form-label">商品標籤 ID</label>
+              <input class="form-control" name="tag_id" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">出口閘道</label>
+              <input class="form-control" name="gate_id" placeholder="例如 Gate-A" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">授權結果</label>
+              <select class="form-select" name="result">
+                {% for key, label in gate_result_labels.items() %}
+                <option value="{{ key }}">{{ label }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">操作時間</label>
+              <input class="form-control" name="timestamp" type="datetime-local">
+            </div>
+            <button class="btn btn-accent w-100" type="submit">送出門禁紀錄</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <section class="table-panel mb-4">
+      <div class="section-title">
+        <h4>商品清單</h4>
+        <div class="d-flex gap-2">
+          <input class="form-control" id="search-keyword" placeholder="搜尋標籤或名稱">
+          <select class="form-select" id="search-status">
+            <option value="">全部狀態</option>
+            {% for code, label in status_labels.items() %}
+            <option value="{{ code }}">{{ label }}</option>
+            {% endfor %}
+          </select>
+          <button class="btn btn-outline-secondary" id="search-button" type="button">查詢</button>
+        </div>
+      </div>
+      <div class="table-responsive">
+        <table class="table align-middle">
+          <thead>
+            <tr>
+              <th>標籤 ID</th>
+              <th>商品名稱</th>
+              <th>價格</th>
+              <th>狀態</th>
+              <th>最後任務</th>
+              <th>更新時間</th>
+            </tr>
+          </thead>
+          <tbody id="product-table-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="row g-4">
+      <div class="col-lg-6">
+        <div class="table-panel">
+          <div class="section-title"><h4>最近操作紀錄</h4></div>
+          <div class="table-responsive">
+            <table class="table align-middle">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>標籤</th>
+                  <th>操作</th>
+                  <th>操作者</th>
+                  <th>時間</th>
+                </tr>
+              </thead>
+              <tbody id="operation-table-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="table-panel">
+          <div class="section-title"><h4>最近門禁紀錄</h4></div>
+          <div class="table-responsive">
+            <table class="table align-middle">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>標籤</th>
+                  <th>閘道</th>
+                  <th>結果</th>
+                  <th>時間</th>
+                </tr>
+              </thead>
+              <tbody id="gate-table-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const feedbackEl = document.getElementById('feedback');
+    const productForm = document.getElementById('product-form');
+    const operationForm = document.getElementById('operation-form');
+    const gateForm = document.getElementById('gate-form');
+    const resetProductFormButton = document.getElementById('reset-product-form');
+    const productSubmitButton = document.getElementById('product-submit');
+    let editingTagId = null;
+
+    function showMessage(message, isError = false) {
+      feedbackEl.textContent = message;
+      feedbackEl.className = isError ? 'toast-bar toast-error' : 'toast-bar toast-success';
+      setTimeout(() => {
+        feedbackEl.className = 'toast-bar';
+      }, 2500);
+    }
+
+    function formatTime(value) {
+      if (!value) return '-';
+      return new Date(value).toLocaleString('zh-TW', { hour12: false });
+    }
+
+    function statusBadge(statusCode, label) {
+      return `<span class="badge-status status-${statusCode}">${label}</span>`;
+    }
+
+    async function fetchJson(url, options = {}) {
+      const response = await fetch(url, {
+        headers: { 'Content-Type': 'application/json' },
+        ...options
+      });
+      const payload = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        throw new Error(payload.error || '發生未預期錯誤');
+      }
+      return payload;
+    }
+
+    async function loadSummary() {
+      const summary = await fetchJson('/api/v1.0/summary');
+      Object.entries(summary).forEach(([key, value]) => {
+        const el = document.getElementById(key);
+        if (el) el.textContent = value;
+      });
+    }
+
+    async function loadProducts() {
+      const keyword = document.getElementById('search-keyword').value.trim();
+      const status = document.getElementById('search-status').value;
+      const params = new URLSearchParams();
+      if (keyword) params.set('keyword', keyword);
+      if (status !== '') params.set('status', status);
+
+      const products = await fetchJson(`/api/v1.0/products?${params.toString()}`);
+      const body = document.getElementById('product-table-body');
+
+      body.innerHTML = products.map(product => `
+        <tr data-tag-id="${product.tag_id}">
+          <td>${product.tag_id}</td>
+          <td>${product.product_name}</td>
+          <td>$${product.price.toFixed(2)}</td>
+          <td>${statusBadge(product.status_code, product.status_label)}</td>
+          <td>${product.last_action}</td>
+          <td>${formatTime(product.update_time)}</td>
+        </tr>
+      `).join('');
+
+      body.querySelectorAll('tr').forEach((row, index) => {
+        row.addEventListener('click', () => fillProductForm(products[index]));
+      });
+    }
+
+    async function loadOperations() {
+      const operations = await fetchJson('/api/v1.0/operations');
+      const body = document.getElementById('operation-table-body');
+      body.innerHTML = operations.map(item => `
+        <tr>
+          <td>${item.operation_id}</td>
+          <td>${item.tag_id}</td>
+          <td>${item.action_label}</td>
+          <td>${item.operator}</td>
+          <td>${formatTime(item.timestamp)}</td>
+        </tr>
+      `).join('');
+    }
+
+    async function loadGateRecords() {
+      const gateRecords = await fetchJson('/api/v1.0/gate-records');
+      const body = document.getElementById('gate-table-body');
+      body.innerHTML = gateRecords.map(item => `
+        <tr>
+          <td>${item.gate_record_id}</td>
+          <td>${item.tag_id}</td>
+          <td>${item.gate_id}</td>
+          <td>${item.result_label}</td>
+          <td>${formatTime(item.timestamp)}</td>
+        </tr>
+      `).join('');
+    }
+
+    function resetProductForm() {
+      editingTagId = null;
+      productForm.reset();
+      document.getElementById('tag_id').readOnly = false;
+      productSubmitButton.textContent = '新增商品';
+    }
+
+    function fillProductForm(product) {
+      editingTagId = product.tag_id;
+      document.getElementById('tag_id').value = product.tag_id;
+      document.getElementById('tag_id').readOnly = true;
+      document.getElementById('product_name').value = product.product_name;
+      document.getElementById('price').value = product.price;
+      document.getElementById('status_code').value = product.status_code;
+      productSubmitButton.textContent = '更新商品';
+    }
+
+    async function refreshAll() {
+      await Promise.all([loadSummary(), loadProducts(), loadOperations(), loadGateRecords()]);
+    }
+
+    productForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const formData = Object.fromEntries(new FormData(productForm).entries());
+
+      try {
+        if (editingTagId) {
+          await fetchJson(`/api/v1.0/products/${editingTagId}`, {
+            method: 'PATCH',
+            body: JSON.stringify(formData)
+          });
+          showMessage('商品資料已更新');
+        } else {
+          await fetchJson('/api/v1.0/products', {
+            method: 'POST',
+            body: JSON.stringify(formData)
+          });
+          showMessage('商品已建立');
+        }
+
+        resetProductForm();
+        await refreshAll();
+      } catch (error) {
+        showMessage(error.message, true);
+      }
+    });
+
+    operationForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const formData = Object.fromEntries(new FormData(operationForm).entries());
+
+      try {
+        await fetchJson('/api/v1.0/operations', {
+          method: 'POST',
+          body: JSON.stringify(formData)
+        });
+        operationForm.reset();
+        showMessage('庫存操作紀錄已新增');
+        await refreshAll();
+      } catch (error) {
+        showMessage(error.message, true);
+      }
+    });
+
+    gateForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const formData = Object.fromEntries(new FormData(gateForm).entries());
+
+      try {
+        await fetchJson('/api/v1.0/gate-records', {
+          method: 'POST',
+          body: JSON.stringify(formData)
+        });
+        gateForm.reset();
+        showMessage('門禁事件已記錄');
+        await refreshAll();
+      } catch (error) {
+        showMessage(error.message, true);
+      }
+    });
+
+    resetProductFormButton.addEventListener('click', resetProductForm);
+    document.getElementById('search-button').addEventListener('click', loadProducts);
+
+    refreshAll().catch((error) => showMessage(error.message, true));
+  </script>
+</body>
+</html>

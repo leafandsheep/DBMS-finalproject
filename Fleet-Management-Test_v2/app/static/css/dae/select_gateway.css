@@ -1,0 +1,9 @@
+svg .add-button {
+    cursor: pointer,
+    height: 160px;
+}
+
+.gateway-button{
+    width: 150px;
+    height: 45px;
+}

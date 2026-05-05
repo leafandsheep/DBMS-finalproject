@@ -1,0 +1,57 @@
+h5 {
+    font-size: 1.25rem;
+}
+
+.card-body {
+    padding: 1.25rem;
+}
+
+.demand-now {
+    color: #3f4254;
+    font-size: 4rem;
+}
+
+.demand-now-unit {
+    font-size: 1.5rem;
+    color: #6e7391;
+}
+
+.contract-capacity {
+    font-size: 1.2rem;
+}
+
+.unload-button {
+	background-color: #fff4de !important;
+}
+
+.unload-button-icon, .unload-button-name {
+    color: #ffa800;
+}
+
+.unload-button-icon {
+    font-size: 2rem;
+}
+
+.unload-button-name {
+    font-size: 1.4rem;
+}
+
+.btn-outline-unload {
+    color: #ffa800;
+    background-color: white;
+    cursor: pointer;
+}
+
+.btn-check:active + .btn-outline-unload, .btn-check:checked + .btn-outline-unload, .btn-outline-unload.active, .btn-outline-unload.dropdown-toggle.show, .btn-outline-unload:active {
+    color: #fff;
+    background-color: #ffa800;
+    border-color: #ffa800;
+}
+
+.btn-check {
+    position: absolute;
+    clip: rect(0,0,0,0);
+    pointer-events: none;
+}
+
+
