@@ -1,112 +1,83 @@
 # Warehouse Management System
 
-這個版本已將原本的車隊管理展示架構，改造成「商品倉儲管理系統」第一版，對應簡報中的三個核心資料表：
+這個專案是以 Flask + MySQL 實作的商品倉儲管理系統第一版，已從原始車隊管理架構整理成目前實際要展示的倉儲版本。
 
-- 商品主表 `products`
-- 操作紀錄表 `inventory_operations`
-- 門禁紀錄表 `gate_records`
+## 目前保留的核心功能
 
-## 目前已完成的功能
-
-- 商品新增、編輯、查詢
-- 商品狀態追蹤：`庫存中 / 已結帳 / 未授權離場`
-- 入庫與出庫紀錄
-- 門禁授權與未授權事件紀錄
+- 商品主表管理
+- 入庫 / 出庫操作紀錄
+- 門禁授權 / 未授權事件紀錄
 - 首頁摘要儀表板
-- Docker 初始化 MySQL schema 與範例資料
+- 主題式列表頁
+- MySQL schema 與範例資料初始化
 
-## 資料表對應
+## 資料表
 
-### products
+- `products`
+  - 商品主檔，包含 `tag_id`、`product_name`、`price`、`status_code`
+- `inventory_operations`
+  - 入庫與出庫紀錄，包含 `action`、`operator`、`timestamp`
+- `gate_records`
+  - 門禁事件紀錄，包含 `gate_id`、`result`、`timestamp`
 
-- `tag_id`: 商品標籤 ID，主鍵
-- `product_name`: 商品名稱
-- `price`: 商品價格
-- `status_code`: 商品狀態碼
-- `last_action`: 最後操作類型
-- `update_time`: 最後更新時間
+## 專案結構
 
-### inventory_operations
+- `app/`
+  - Flask 應用程式、API、頁面模板、資料模型
+- `manage.py`
+  - 啟動入口
+- `warehouse_management.sql`
+  - 建表與範例資料
+- `default_config.ini`
+  - 本機 MySQL 設定
+- `docker_config.ini`
+  - Docker 內部網路設定
+- `local_docker_mysql.ini`
+  - 本機 Flask + Docker MySQL 設定
+- `TERMINAL_COMMANDS.md`
+  - 可直接複製的啟動指令
 
-- `operation_id`: 流水號，主鍵
-- `tag_id`: 商品標籤 ID，外鍵
-- `action`: 入庫或出庫
-- `operator`: 操作者
-- `timestamp`: 操作時間
+## 本機啟動
 
-### gate_records
-
-- `gate_record_id`: 流水號，主鍵
-- `tag_id`: 商品標籤 ID，外鍵
-- `gate_id`: 出口閘道
-- `result`: 已授權或未授權
-- `timestamp`: 操作時間
-
-## 本機執行
-
-1. 安裝套件
+1. 建立環境
 
 ```bash
-pip install -r requirements.txt
+conda env create -f environment.yml
+conda activate warehouse-management
 ```
 
-2. 設定 MySQL 並建立資料庫
+2. 匯入資料庫
 
 ```bash
 mysql -u root -p < warehouse_management.sql
 ```
 
-若你的 MySQL 不在本機 `127.0.0.1:3306`，請先調整 [default_config.ini](/Users/thenights/Downloads/大二所有學科/大二資料庫/資料庫專案/Fleet-Management-Test_v2/default_config.ini)。
-
-你也可以直接在啟動時覆蓋連線設定，例如：
+3. 啟動系統
 
 ```bash
-MYSQL_HOST=127.0.0.1 MYSQL_PORT=3306 MYSQL_USER=root MYSQL_PASSWORD=你的密碼 DB_NAME=warehouse_management CONFIG_FILE=./default_config.ini python manage.py runserver -h 0.0.0.0 -p 5000
+MYSQL_HOST=127.0.0.1 MYSQL_PORT=3306 MYSQL_USER=warehouse_user MYSQL_PASSWORD=warehouse_pass_123 DB_NAME=warehouse_management CONFIG_FILE=./default_config.ini python manage.py runserver -h 0.0.0.0 -p 5001
 ```
 
-3. 啟動應用程式
-
-```bash
-CONFIG_FILE=./default_config.ini python manage.py runserver -h 0.0.0.0 -p 5000
-```
-
-4. 開啟瀏覽器
+4. 開啟頁面
 
 ```text
-http://localhost:5000
+http://localhost:5001
 ```
 
-## Docker 執行
+更完整的操作方式請直接看 [TERMINAL_COMMANDS.md](/Users/thenights/Downloads/大二所有學科/大二資料庫/資料庫專案/Fleet-Management-Test_v2/TERMINAL_COMMANDS.md)。
 
-若之前已用舊 schema 跑過，請先清空 `data/mysql` 再重新建立容器。
+## Docker 啟動
 
 ```bash
 docker compose build
 docker compose up -d
 ```
 
-頁面預設在：
+- Web: `http://localhost:5000`
+- MySQL: `localhost:3307`
 
-```text
-http://localhost:5000
-```
+## 目前狀態
 
-MySQL 預設對外埠：
-
-```text
-localhost:3307
-```
-
-如果 Flask 在本機虛擬環境執行、MySQL 在 Docker 裡執行，請用：
-
-```bash
-CONFIG_FILE=./local_docker_mysql.ini python manage.py runserver -h 0.0.0.0 -p 5000
-```
-
-## 後續可擴充方向
-
-- 使用者登入與角色權限
-- 商品分類、供應商、倉位管理
-- 圖表報表與異常告警
-- RFID/條碼硬體串接
-- 交易流程與授權審核
+- 已移除舊車隊管理、實驗腳本、快取與 log 類檔案
+- 保留目前倉儲系統展示所需的最小核心檔案
+- 適合後續以分支和 PR 方式繼續迭代功能
