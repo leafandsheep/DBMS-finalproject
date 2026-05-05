@@ -5,6 +5,10 @@ __pycache__/
 *.pyd
 *.log
 .pytest_cache/
-
 data/
-app.log
+env/
+venv/
+ENV/
+build/
+dist/
+*.egg-info/
