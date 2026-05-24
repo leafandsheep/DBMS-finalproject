@@ -1,0 +1,29 @@
+Table inventory_items {
+  serial_number varchar(64) [pk]
+  item_name varchar(120) [not null]
+  color varchar(60) [not null]
+  status_code int [not null, default: 0, note: '0=in stock, 1=sold, 2=unauthorized']
+  created_at datetime [not null]
+  updated_at datetime [not null]
+}
+
+Table counter_logs {
+  counter_log_id int [pk, increment]
+  serial_number varchar(64) [not null, ref: > inventory_items.serial_number]
+  previous_status int [not null]
+  new_status int [not null]
+  operator varchar(80) [not null]
+  note varchar(255)
+  timestamp datetime [not null]
+}
+
+Table gate_logs {
+  gate_log_id int [pk, increment]
+  serial_number varchar(64) [not null, ref: > inventory_items.serial_number]
+  result varchar(20) [not null, note: 'authorized / unauthorized']
+  previous_status int [not null]
+  new_status int [not null]
+  note varchar(255)
+  is_unread boolean [not null, default: false]
+  timestamp datetime [not null]
+}
