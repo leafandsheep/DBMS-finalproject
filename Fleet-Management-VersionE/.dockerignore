@@ -1,0 +1,28 @@
+# 忽略系統資料夾與 socket
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.DS_Store
+.Python
+env/
+venv/
+ENV/
+.build/
+.eggs/
+*.egg-info/
+dist/
+build/
+
+# 忽略資料庫檔案與 socket
+data/
+*.sock
+*.pid
+
+# Docker 不需要打包的檔案
+.git/
+*.log
+*.db
+*.sqlite3
+.idea/
+.vscode/

@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>第五版本 E｜單件流水號倉庫系統</title>
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+    crossorigin="anonymous"
+  >
+  <style>
+    :root {
+      --bg: #f6efe6;
+      --surface: rgba(255, 255, 255, 0.95);
+      --ink: #20303d;
+      --muted: #6b7280;
+      --accent: #9e5a2f;
+      --accent-dark: #774020;
+      --line: rgba(224, 208, 192, 0.9);
+      --shadow: 0 18px 40px rgba(88, 59, 38, 0.1);
+      --danger: #c53030;
+    }
+
+    body {
+      background:
+        radial-gradient(circle at top left, rgba(158, 90, 47, 0.14), transparent 28%),
+        linear-gradient(180deg, #f8f2ea 0%, #f3ece3 100%);
+      color: var(--ink);
+      font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+      min-height: 100vh;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, rgba(119, 64, 32, 0.97), rgba(173, 104, 57, 0.92));
+      color: #fff;
+      border-radius: 28px;
+      padding: 2rem;
+      box-shadow: 0 24px 48px rgba(84, 50, 27, 0.2);
+    }
+
+    .hero p {
+      color: rgba(255, 255, 255, 0.82);
+      margin-bottom: 0;
+    }
+
+    .metric-card,
+    .panel,
+    .table-panel {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .metric-card {
+      padding: 1rem 1.15rem;
+      display: block;
+      position: relative;
+      text-decoration: none;
+      color: inherit;
+      transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+    }
+
+    .metric-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 18px 36px rgba(88, 59, 38, 0.14);
+      border-color: rgba(158, 90, 47, 0.35);
+      color: inherit;
+    }
+
+    .metric-card h6 {
+      color: var(--muted);
+      font-size: 0.92rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .metric-card strong {
+      font-size: 1.75rem;
+      display: block;
+    }
+
+    .alert-dot {
+      position: absolute;
+      top: 14px;
+      right: 16px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      background: var(--danger);
+      color: #fff;
+      font-weight: 800;
+      font-size: 1rem;
+      box-shadow: 0 10px 20px rgba(197, 48, 48, 0.25);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .panel,
+    .table-panel {
+      padding: 1.25rem;
+      height: 100%;
+    }
+
+    .section-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .section-title h3,
+    .section-title h4 {
+      margin: 0;
+      font-size: 1.03rem;
+    }
+
+    .btn-accent {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+
+    .btn-accent:hover {
+      background: var(--accent-dark);
+      border-color: var(--accent-dark);
+      color: #fff;
+    }
+
+    .btn-danger-soft {
+      border-color: rgba(197, 48, 48, 0.4);
+      color: var(--danger);
+      background: rgba(197, 48, 48, 0.06);
+    }
+
+    .btn-danger-soft:hover {
+      border-color: var(--danger);
+      color: #fff;
+      background: var(--danger);
+    }
+
+    .badge-soft {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 0.35rem 0.75rem;
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+
+    .tone-in-stock { background: rgba(47, 133, 90, 0.12); color: #2f855a; }
+    .tone-sold { background: rgba(66, 153, 225, 0.12); color: #2b6cb0; }
+    .tone-unauthorized { background: rgba(197, 48, 48, 0.12); color: #c53030; }
+    .tone-authorized { background: rgba(47, 133, 90, 0.12); color: #2f855a; }
+    .tone-unread { background: rgba(197, 48, 48, 0.16); color: #9b2c2c; }
+
+    .toast-bar {
+      display: none;
+      padding: 0.85rem 1rem;
+      border-radius: 14px;
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+
+    .toast-success {
+      display: block;
+      background: rgba(47, 133, 90, 0.12);
+      color: #2f855a;
+    }
+
+    .toast-error {
+      display: block;
+      background: rgba(197, 48, 48, 0.12);
+      color: #c53030;
+    }
+
+    .helper {
+      color: var(--muted);
+      font-size: 0.86rem;
+    }
+
+    .table thead th {
+      border-top: 0;
+      color: var(--muted);
+      font-size: 0.84rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container py-4 py-lg-5">
+    <section class="hero mb-4">
+      <div class="row g-4 align-items-end">
+        <div class="col-lg-8">
+          <h1 class="mb-2">第五版本 E｜單件流水號倉庫系統</h1>
+          <p>這個版本回到單件追蹤。每個物品都有獨立流水號、物件名稱、顏色與狀態碼。正常流程是櫃檯先把狀態設成 1，再讓閘門確認；異常流程則是狀態 0 直接過閘門，系統把它改成 2 並留下未授權日記。</p>
+        </div>
+        <div class="col-lg-4 text-lg-end">
+          <button class="btn btn-danger-soft fw-bold" id="reset-system-button" type="button">初始化一切從零</button>
+        </div>
+      </div>
+    </section>
+
+    <div id="feedback" class="toast-bar"></div>
+
+    <section class="row g-3 mb-4">
+      <div class="col-md-6 col-xl-2"><a class="metric-card" href="{{ url_for('main.details', topic='items') }}"><h6>物品總數</h6><strong id="total_items">0</strong></a></div>
+      <div class="col-md-6 col-xl-2"><a class="metric-card" href="{{ url_for('main.details', topic='in-stock') }}"><h6>庫存中</h6><strong id="in_stock_count">0</strong></a></div>
+      <div class="col-md-6 col-xl-2"><a class="metric-card" href="{{ url_for('main.details', topic='sold') }}"><h6>已售出</h6><strong id="sold_count">0</strong></a></div>
+      <div class="col-md-6 col-xl-2">
+        <a class="metric-card" href="{{ url_for('main.details', topic='unauthorized-events') }}">
+          <h6>未授權事件</h6>
+          <strong id="unauthorized_count">0</strong>
+          <span class="alert-dot hidden" id="unauthorized-alert-dot">!</span>
+        </a>
+      </div>
+      <div class="col-md-6 col-xl-2"><a class="metric-card" href="{{ url_for('main.details', topic='counter-logs') }}"><h6>櫃檯日記</h6><strong id="counter_log_count">0</strong></a></div>
+      <div class="col-md-6 col-xl-2"><a class="metric-card" href="{{ url_for('main.details', topic='gate-logs') }}"><h6>閘門日記</h6><strong id="gate_log_count">0</strong></a></div>
+    </section>
+
+    <section class="row g-4 mb-4">
+      <div class="col-lg-4">
+        <div class="panel">
+          <div class="section-title"><h3>建立物品</h3></div>
+          <form id="item-form">
+            <div class="mb-3">
+              <label class="form-label">物件名稱</label>
+              <input class="form-control" name="item_name" placeholder="例如 馬克杯" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">顏色</label>
+              <input class="form-control" name="color" placeholder="例如 白色" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">建立數量</label>
+              <input class="form-control" name="quantity" type="number" min="1" value="1" required>
+            </div>
+            <div class="helper">如果一次建立多個同種物件，系統會自動生成不同的流水號，但物件名稱與顏色相同。</div>
+            <button class="btn btn-accent mt-3 w-100" type="submit">建立物品</button>
+          </form>
+        </div>
+      </div>
+
+      <div class="col-lg-4">
+        <div class="panel">
+          <div class="section-title"><h3>櫃檯正常出貨</h3></div>
+          <form id="counter-form">
+            <div class="mb-3">
+              <label class="form-label">流水號</label>
+              <input class="form-control" name="serial_number" placeholder="例如 SN-000001" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">操作者</label>
+              <input class="form-control" name="operator" value="Admin" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">備註</label>
+              <input class="form-control" name="note" placeholder="可留空">
+            </div>
+            <div class="helper">櫃檯流程一次只處理一個流水號，成功後把狀態從 0 改成 1。</div>
+            <button class="btn btn-accent mt-3 w-100" type="submit">送櫃檯</button>
+          </form>
+        </div>
+      </div>
+
+      <div class="col-lg-4">
+        <div class="panel">
+          <div class="section-title"><h3>閘門檢查</h3></div>
+          <form id="gate-form">
+            <div class="mb-3">
+              <label class="form-label">流水號</label>
+              <input class="form-control" name="serial_number" placeholder="例如 SN-000001" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">備註</label>
+              <input class="form-control" name="note" placeholder="可留空">
+            </div>
+            <div class="helper">如果目前狀態是 1，就維持 1 並記錄正常出貨；如果目前狀態是 0，就把狀態改成 2 並留下未授權事件。</div>
+            <button class="btn btn-accent mt-3 w-100" type="submit">過閘門</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <section class="table-panel mb-4">
+      <div class="section-title">
+        <h4>庫存彙總（依物件名稱與顏色分組）</h4>
+        <a class="helper text-decoration-none" href="{{ url_for('main.details', topic='grouped-inventory') }}">看完整細節 →</a>
+      </div>
+      <div class="table-responsive">
+        <table class="table align-middle">
+          <thead>
+            <tr>
+              <th>物件名稱</th>
+              <th>顏色</th>
+              <th>總數</th>
+              <th>庫存中</th>
+              <th>已售出</th>
+              <th>未授權</th>
+            </tr>
+          </thead>
+          <tbody id="grouped-table-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="row g-4">
+      <div class="col-lg-6">
+        <div class="table-panel">
+          <div class="section-title"><h4>最近櫃檯日記</h4></div>
+          <div class="table-responsive">
+            <table class="table align-middle">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>流水號</th>
+                  <th>物件 / 顏色</th>
+                  <th>狀態變化</th>
+                </tr>
+              </thead>
+              <tbody id="counter-table-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6">
+        <div class="table-panel">
+          <div class="section-title"><h4>最近閘門日記</h4></div>
+          <div class="table-responsive">
+            <table class="table align-middle">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>流水號</th>
+                  <th>物件 / 顏色</th>
+                  <th>結果</th>
+                </tr>
+              </thead>
+              <tbody id="gate-table-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const feedbackEl = document.getElementById('feedback');
+    const itemForm = document.getElementById('item-form');
+    const counterForm = document.getElementById('counter-form');
+    const gateForm = document.getElementById('gate-form');
+    const unauthorizedAlertDot = document.getElementById('unauthorized-alert-dot');
+    const resetSystemButton = document.getElementById('reset-system-button');
+
+    function showMessage(message, isError = false) {
+      feedbackEl.textContent = message;
+      feedbackEl.className = isError ? 'toast-bar toast-error' : 'toast-bar toast-success';
+      setTimeout(() => {
+        feedbackEl.className = 'toast-bar';
+      }, 3200);
+    }
+
+    function badge(label, tone) {
+      return `<span class="badge-soft tone-${tone}">${label}</span>`;
+    }
+
+    async function fetchJson(url, options = {}) {
+      const response = await fetch(url, {
+        headers: { 'Content-Type': 'application/json' },
+        ...options
+      });
+      const payload = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        throw new Error(payload.error || '發生未預期錯誤');
+      }
+      return payload;
+    }
+
+    async function loadSummary() {
+      const summary = await fetchJson('/api/v1.0/summary');
+      [
+        'total_items',
+        'in_stock_count',
+        'sold_count',
+        'unauthorized_count',
+        'counter_log_count',
+        'gate_log_count'
+      ].forEach((key) => {
+        const el = document.getElementById(key);
+        if (el) el.textContent = summary[key] ?? 0;
+      });
+
+      if ((summary.unread_unauthorized_count || 0) > 0) {
+        unauthorizedAlertDot.classList.remove('hidden');
+      } else {
+        unauthorizedAlertDot.classList.add('hidden');
+      }
+    }
+
+    async function loadGroupedInventory() {
+      const rows = await fetchJson('/api/v1.0/inventory-groups');
+      const body = document.getElementById('grouped-table-body');
+      body.innerHTML = rows.map((row) => `
+        <tr>
+          <td>${row.item_name}</td>
+          <td>${row.color}</td>
+          <td>${row.total_count}</td>
+          <td>${row.in_stock_count}</td>
+          <td>${row.sold_count}</td>
+          <td>${row.unauthorized_count}</td>
+        </tr>
+      `).join('');
+    }
+
+    async function loadCounterLogs() {
+      const rows = await fetchJson('/api/v1.0/counter-logs');
+      const body = document.getElementById('counter-table-body');
+      body.innerHTML = rows.map((row) => `
+        <tr>
+          <td>${row.counter_log_id}</td>
+          <td><code>${row.serial_number}</code></td>
+          <td>${row.item_name}<div class="helper">${row.color}</div></td>
+          <td>${row.previous_status_label} → ${row.new_status_label}</td>
+        </tr>
+      `).join('');
+    }
+
+    async function loadGateLogs() {
+      const rows = await fetchJson('/api/v1.0/gate-logs');
+      const body = document.getElementById('gate-table-body');
+      body.innerHTML = rows.map((row) => `
+        <tr>
+          <td>${row.gate_log_id}</td>
+          <td><code>${row.serial_number}</code></td>
+          <td>${row.item_name}<div class="helper">${row.color}</div></td>
+          <td>
+            ${badge(row.result_label, row.result)}
+            ${row.is_unread ? `<span class="badge-soft tone-unread ms-2">未讀</span>` : ''}
+            <div class="helper mt-1">${row.previous_status_label} → ${row.new_status_label}</div>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    async function refreshAll() {
+      await Promise.all([loadSummary(), loadGroupedInventory(), loadCounterLogs(), loadGateLogs()]);
+    }
+
+    itemForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const payload = Object.fromEntries(new FormData(itemForm).entries());
+      try {
+        const result = await fetchJson('/api/v1.0/inventory-items', {
+          method: 'POST',
+          body: JSON.stringify(payload)
+        });
+        showMessage(`已建立 ${result.created_count} 件物品，流水號起始：${result.serial_numbers[0]}`);
+        itemForm.reset();
+        await refreshAll();
+      } catch (error) {
+        showMessage(error.message, true);
+      }
+    });
+
+    counterForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const payload = Object.fromEntries(new FormData(counterForm).entries());
+      try {
+        const result = await fetchJson('/api/v1.0/counter-logs', {
+          method: 'POST',
+          body: JSON.stringify(payload)
+        });
+        showMessage(`櫃檯完成：${result.serial_number} 已設成 ${result.new_status_label}`);
+        counterForm.reset();
+        await refreshAll();
+      } catch (error) {
+        showMessage(error.message, true);
+      }
+    });
+
+    gateForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const payload = Object.fromEntries(new FormData(gateForm).entries());
+      try {
+        const result = await fetchJson('/api/v1.0/gate-logs', {
+          method: 'POST',
+          body: JSON.stringify(payload)
+        });
+        showMessage(`閘門結果：${result.result_label}`);
+        gateForm.reset();
+        await refreshAll();
+      } catch (error) {
+        showMessage(error.message, true);
+      }
+    });
+
+    resetSystemButton.addEventListener('click', async () => {
+      const confirmed = window.confirm(
+        '確定要把版本 E 的主表、櫃檯日記、閘門日記全部清空嗎？\\n這會讓系統回到真正從零開始的狀態。'
+      );
+      if (!confirmed) return;
+
+      try {
+        const result = await fetchJson('/api/v1.0/system/reset', {
+          method: 'POST',
+          body: JSON.stringify({})
+        });
+        itemForm.reset();
+        counterForm.reset();
+        gateForm.reset();
+        showMessage(result.message);
+        await refreshAll();
+      } catch (error) {
+        showMessage(error.message, true);
+      }
+    });
+
+    refreshAll().catch((error) => showMessage(error.message, true));
+  </script>
+</body>
+</html>

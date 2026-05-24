@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ title }}｜第五版本 E</title>
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+    crossorigin="anonymous"
+  >
+  <style>
+    :root {
+      --bg: #f6efe6;
+      --surface: rgba(255, 255, 255, 0.95);
+      --ink: #20303d;
+      --muted: #6b7280;
+      --accent: #9e5a2f;
+      --accent-dark: #774020;
+      --line: rgba(224, 208, 192, 0.9);
+      --shadow: 0 18px 40px rgba(88, 59, 38, 0.1);
+    }
+
+    body {
+      background:
+        radial-gradient(circle at top left, rgba(158, 90, 47, 0.14), transparent 28%),
+        linear-gradient(180deg, #f8f2ea 0%, #f3ece3 100%);
+      color: var(--ink);
+      font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+      min-height: 100vh;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, rgba(119, 64, 32, 0.97), rgba(173, 104, 57, 0.92));
+      color: #fff;
+      border-radius: 28px;
+      padding: 2rem;
+      box-shadow: 0 24px 48px rgba(84, 50, 27, 0.2);
+    }
+
+    .hero p {
+      color: rgba(255, 255, 255, 0.82);
+      margin-bottom: 0;
+      max-width: 50rem;
+    }
+
+    .count-pill {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.16);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      border-radius: 22px;
+      min-width: 140px;
+      min-height: 140px;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    .count-pill span {
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.78);
+    }
+
+    .count-pill strong {
+      font-size: 3rem;
+      line-height: 1;
+    }
+
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      padding: 1.25rem;
+    }
+
+    .back-link {
+      text-decoration: none;
+      color: var(--accent-dark);
+      font-weight: 700;
+    }
+
+    .helper {
+      color: var(--muted);
+      font-size: 0.86rem;
+    }
+
+    .table thead th {
+      border-top: 0;
+      color: var(--muted);
+      font-size: 0.84rem;
+    }
+
+    .badge-soft {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 0.35rem 0.75rem;
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+
+    .tone-in-stock { background: rgba(47, 133, 90, 0.12); color: #2f855a; }
+    .tone-sold { background: rgba(66, 153, 225, 0.12); color: #2b6cb0; }
+    .tone-unauthorized { background: rgba(197, 48, 48, 0.12); color: #c53030; }
+    .tone-authorized { background: rgba(47, 133, 90, 0.12); color: #2f855a; }
+    .tone-unread { background: rgba(197, 48, 48, 0.16); color: #9b2c2c; }
+
+    .empty-box {
+      text-align: center;
+      color: var(--muted);
+      border: 2px dashed var(--line);
+      border-radius: 18px;
+      padding: 3rem 1rem;
+      background: rgba(255, 255, 255, 0.55);
+    }
+  </style>
+</head>
+<body>
+  <div class="container py-4 py-lg-5">
+    <div class="mb-3">
+      <a class="back-link" href="{{ url_for('main.index') }}">← 返回單件流水號倉庫系統</a>
+    </div>
+
+    <section class="hero mb-4">
+      <div class="row g-4 align-items-center">
+        <div class="col-lg-8">
+          <h1 class="mb-3">{{ title }}</h1>
+          <p>{{ subtitle }}</p>
+        </div>
+        <div class="col-lg-4 text-lg-end">
+          <div class="count-pill ms-lg-auto">
+            <span>目前筆數</span>
+            <strong>{{ count }}</strong>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      {% if rows %}
+      <div class="table-responsive">
+        <table class="table align-middle">
+          {% if table_type == 'items' %}
+          <thead>
+            <tr>
+              <th>流水號</th>
+              <th>物件名稱</th>
+              <th>顏色</th>
+              <th>狀態</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in rows %}
+            <tr>
+              <td><code>{{ row.serial_number }}</code></td>
+              <td>{{ row.item_name }}</td>
+              <td>{{ row.color }}</td>
+              <td><span class="badge-soft tone-{{ row.status_tone }}">{{ row.status_label }}</span></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+          {% elif table_type == 'counter-logs' %}
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>流水號</th>
+              <th>物件 / 顏色</th>
+              <th>狀態變化</th>
+              <th>操作者</th>
+              <th>說明</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in rows %}
+            <tr>
+              <td>{{ row.counter_log_id }}</td>
+              <td><code>{{ row.serial_number }}</code></td>
+              <td>{{ row.item_name }}<div class="helper">{{ row.color }}</div></td>
+              <td>{{ row.previous_status_label }} → {{ row.new_status_label }}</td>
+              <td>{{ row.operator }}</td>
+              <td>{{ row.note or '-' }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+          {% elif table_type == 'gate-logs' %}
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>流水號</th>
+              <th>物件 / 顏色</th>
+              <th>結果</th>
+              <th>狀態變化</th>
+              <th>說明</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in rows %}
+            <tr>
+              <td>{{ row.gate_log_id }}</td>
+              <td><code>{{ row.serial_number }}</code></td>
+              <td>{{ row.item_name }}<div class="helper">{{ row.color }}</div></td>
+              <td>
+                <span class="badge-soft tone-{{ row.result }}">{{ row.result_label }}</span>
+                {% if row.is_unread %}
+                <span class="badge-soft tone-unread ms-2">未讀</span>
+                {% endif %}
+              </td>
+              <td>{{ row.previous_status_label }} → {{ row.new_status_label }}</td>
+              <td>{{ row.note or '-' }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+          {% else %}
+          <thead>
+            <tr>
+              <th>物件名稱</th>
+              <th>顏色</th>
+              <th>總數</th>
+              <th>庫存中</th>
+              <th>已售出</th>
+              <th>未授權</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in rows %}
+            <tr>
+              <td>{{ row.item_name }}</td>
+              <td>{{ row.color }}</td>
+              <td>{{ row.total_count }}</td>
+              <td>{{ row.in_stock_count }}</td>
+              <td>{{ row.sold_count }}</td>
+              <td>{{ row.unauthorized_count }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+          {% endif %}
+        </table>
+      </div>
+      {% else %}
+      <div class="empty-box">{{ empty_message }}</div>
+      {% endif %}
+    </section>
+  </div>
+</body>
+</html>
