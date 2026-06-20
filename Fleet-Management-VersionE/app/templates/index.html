@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>第五版本 E｜單件流水號倉庫系統</title>
+  <title>單件流水號倉庫系統</title>
   <link
     href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
     rel="stylesheet"
@@ -190,6 +190,14 @@
       color: var(--muted);
       font-size: 0.84rem;
     }
+
+    .search-result-box {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 0.75rem 1rem;
+      background: rgba(255, 255, 255, 0.6);
+      margin-top: 0.5rem;
+    }
   </style>
 </head>
 <body>
@@ -197,8 +205,8 @@
     <section class="hero mb-4">
       <div class="row g-4 align-items-end">
         <div class="col-lg-8">
-          <h1 class="mb-2">第五版本 E｜單件流水號倉庫系統</h1>
-          <p>這個版本回到單件追蹤。每個物品都有獨立流水號、物件名稱、顏色與狀態碼。正常流程是櫃檯先把狀態設成 1，再讓閘門確認；異常流程則是狀態 0 直接過閘門，系統把它改成 2 並留下未授權日記。</p>
+          <h1 class="mb-2">單件流水號倉庫系統</h1>
+          <p>每件商品都有獨立流水號與選填尺寸。店員替會員查詢、結帳，閘門自動判定正常或未授權。</p>
         </div>
         <div class="col-lg-4 text-lg-end">
           <button class="btn btn-danger-soft fw-bold" id="reset-system-button" type="button">初始化一切從零</button>
@@ -209,21 +217,61 @@
     <div id="feedback" class="toast-bar"></div>
 
     <section class="row g-3 mb-4">
-      <div class="col-md-6 col-xl-2"><a class="metric-card" href="{{ url_for('main.details', topic='items') }}"><h6>物品總數</h6><strong id="total_items">0</strong></a></div>
-      <div class="col-md-6 col-xl-2"><a class="metric-card" href="{{ url_for('main.details', topic='in-stock') }}"><h6>庫存中</h6><strong id="in_stock_count">0</strong></a></div>
-      <div class="col-md-6 col-xl-2"><a class="metric-card" href="{{ url_for('main.details', topic='sold') }}"><h6>已售出</h6><strong id="sold_count">0</strong></a></div>
-      <div class="col-md-6 col-xl-2">
+      <div class="col-6 col-md-4 col-xl-2"><a class="metric-card" href="{{ url_for('main.details', topic='items') }}"><h6>物品總數</h6><strong id="total_items">0</strong></a></div>
+      <div class="col-6 col-md-4 col-xl-2"><a class="metric-card" href="{{ url_for('main.details', topic='in-stock') }}"><h6>庫存中</h6><strong id="in_stock_count">0</strong></a></div>
+      <div class="col-6 col-md-4 col-xl-2"><a class="metric-card" href="{{ url_for('main.details', topic='sold') }}"><h6>已售出</h6><strong id="sold_count">0</strong></a></div>
+      <div class="col-6 col-md-4 col-xl-2">
         <a class="metric-card" href="{{ url_for('main.details', topic='unauthorized-events') }}">
           <h6>未授權事件</h6>
           <strong id="unauthorized_count">0</strong>
           <span class="alert-dot hidden" id="unauthorized-alert-dot">!</span>
         </a>
       </div>
-      <div class="col-md-6 col-xl-2"><a class="metric-card" href="{{ url_for('main.details', topic='counter-logs') }}"><h6>櫃檯日記</h6><strong id="counter_log_count">0</strong></a></div>
-      <div class="col-md-6 col-xl-2"><a class="metric-card" href="{{ url_for('main.details', topic='gate-logs') }}"><h6>閘門日記</h6><strong id="gate_log_count">0</strong></a></div>
+      <div class="col-6 col-md-4 col-xl-2"><a class="metric-card" href="{{ url_for('main.details', topic='counter-logs') }}"><h6>櫃檯日記</h6><strong id="counter_log_count">0</strong></a></div>
+      <div class="col-6 col-md-4 col-xl-2"><a class="metric-card" href="{{ url_for('main.details', topic='gate-logs') }}"><h6>閘門日記</h6><strong id="gate_log_count">0</strong></a></div>
+      <div class="col-6 col-md-4 col-xl-2"><a class="metric-card" href="{{ url_for('main.details', topic='employees') }}"><h6>員工人數</h6><strong id="employee_count">0</strong></a></div>
+      <div class="col-6 col-md-4 col-xl-2"><a class="metric-card" href="{{ url_for('main.details', topic='customers') }}"><h6>會員人數</h6><strong id="customer_count">0</strong></a></div>
+      <div class="col-6 col-md-4 col-xl-2"><a class="metric-card" href="{{ url_for('main.details', topic='search-logs') }}"><h6>查詢次數</h6><strong id="search_log_count">0</strong></a></div>
     </section>
 
+    <!-- 基本資料：員工 / 會員 / 商品 -->
     <section class="row g-4 mb-4">
+      <div class="col-lg-4">
+        <div class="panel">
+          <div class="section-title"><h3>建立員工</h3></div>
+          <form id="employee-form">
+            <div class="mb-3">
+              <label class="form-label">姓名</label>
+              <input class="form-control" name="name" placeholder="例如 小美" required>
+            </div>
+            <div class="helper">員工是結帳與查詢時的操作者。閘門事件不會記到員工身上。</div>
+            <button class="btn btn-accent mt-3 w-100" type="submit">新增員工</button>
+          </form>
+        </div>
+      </div>
+
+      <div class="col-lg-4">
+        <div class="panel">
+          <div class="section-title"><h3>建立會員</h3></div>
+          <form id="customer-form">
+            <div class="mb-3">
+              <label class="form-label">姓名</label>
+              <input class="form-control" name="name" placeholder="例如 阿明" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">慣用尺寸</label>
+              <input class="form-control" name="preferred_size" placeholder="例如 M" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">電話（可留空）</label>
+              <input class="form-control" name="phone" placeholder="例如 0912-345-678">
+            </div>
+            <div class="helper">會員有單一慣用尺寸；查詢時會自動帶入，需要別的尺寸再手動改。</div>
+            <button class="btn btn-accent mt-3 w-100" type="submit">新增會員</button>
+          </form>
+        </div>
+      </div>
+
       <div class="col-lg-4">
         <div class="panel">
           <div class="section-title"><h3>建立物品</h3></div>
@@ -232,43 +280,91 @@
               <label class="form-label">物件名稱</label>
               <input class="form-control" name="item_name" placeholder="例如 馬克杯" required>
             </div>
-            <div class="mb-3">
-              <label class="form-label">顏色</label>
-              <input class="form-control" name="color" placeholder="例如 白色" required>
+            <div class="row g-2">
+              <div class="col-6 mb-3">
+                <label class="form-label">顏色</label>
+                <input class="form-control" name="color" placeholder="例如 白色" required>
+              </div>
+              <div class="col-6 mb-3">
+                <label class="form-label">尺寸（可留空）</label>
+                <input class="form-control" name="size" placeholder="配件免填">
+              </div>
             </div>
             <div class="mb-3">
               <label class="form-label">建立數量</label>
               <input class="form-control" name="quantity" type="number" min="1" value="1" required>
             </div>
-            <div class="helper">如果一次建立多個同種物件，系統會自動生成不同的流水號，但物件名稱與顏色相同。</div>
+            <div class="helper">尺寸是選填，配件類商品可留空。一次建立多個會自動生成不同流水號，其餘屬性相同。</div>
             <button class="btn btn-accent mt-3 w-100" type="submit">建立物品</button>
           </form>
         </div>
       </div>
+    </section>
 
-      <div class="col-lg-4">
+    <!-- 會員尺寸查詢 -->
+    <section class="panel mb-4">
+      <div class="section-title">
+        <h3>會員尺寸查詢</h3>
+        <a class="helper text-decoration-none" href="{{ url_for('main.details', topic='search-logs') }}">看查詢紀錄 →</a>
+      </div>
+      <form id="search-form">
+        <div class="row g-3 align-items-end">
+          <div class="col-md-3">
+            <label class="form-label">操作店員</label>
+            <select class="form-select" id="search-employee" name="employee_id" required></select>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">服務會員</label>
+            <select class="form-select" id="search-customer" name="customer_id" required></select>
+          </div>
+          <div class="col-md-2">
+            <label class="form-label">尺寸（可留空）</label>
+            <input class="form-control" id="search-size" name="size" placeholder="選會員自動帶入">
+          </div>
+          <div class="col-md-2">
+            <label class="form-label">限定物件（可留空）</label>
+            <input class="form-control" id="search-item-name" name="item_name" placeholder="例如 馬克杯">
+          </div>
+          <div class="col-md-2">
+            <button class="btn btn-accent w-100" type="submit">查詢在庫</button>
+          </div>
+        </div>
+      </form>
+      <div class="helper mt-2">選會員後會自動帶入慣用尺寸，可手動改或清空。尺寸留空＝不限尺寸（適合配件）；指定尺寸時，沒有尺寸的配件也會一併列入。查詢只看「庫存中」的商品，並留下一筆查詢紀錄與時間。</div>
+      <div id="search-result" class="search-result-box hidden"></div>
+    </section>
+
+    <!-- 櫃檯 / 閘門 -->
+    <section class="row g-4 mb-4">
+      <div class="col-lg-6">
         <div class="panel">
           <div class="section-title"><h3>櫃檯正常出貨</h3></div>
           <form id="counter-form">
-            <div class="mb-3">
-              <label class="form-label">流水號</label>
-              <input class="form-control" name="serial_number" placeholder="例如 SN-000001" required>
-            </div>
-            <div class="mb-3">
-              <label class="form-label">操作者</label>
-              <input class="form-control" name="operator" value="Admin" required>
+            <div class="row g-2">
+              <div class="col-md-12 mb-3">
+                <label class="form-label">流水號</label>
+                <input class="form-control" name="serial_number" placeholder="例如 SN-000001" required>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">結帳店員</label>
+                <select class="form-select" id="counter-employee" name="employee_id" required></select>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">購買會員</label>
+                <select class="form-select" id="counter-customer" name="customer_id" required></select>
+              </div>
             </div>
             <div class="mb-3">
               <label class="form-label">備註</label>
               <input class="form-control" name="note" placeholder="可留空">
             </div>
-            <div class="helper">櫃檯流程一次只處理一個流水號，成功後把狀態從 0 改成 1。</div>
+            <div class="helper">一次只處理一個流水號，成功後狀態 0 → 1，並記下店員與會員。</div>
             <button class="btn btn-accent mt-3 w-100" type="submit">送櫃檯</button>
           </form>
         </div>
       </div>
 
-      <div class="col-lg-4">
+      <div class="col-lg-6">
         <div class="panel">
           <div class="section-title"><h3>閘門檢查</h3></div>
           <form id="gate-form">
@@ -280,7 +376,7 @@
               <label class="form-label">備註</label>
               <input class="form-control" name="note" placeholder="可留空">
             </div>
-            <div class="helper">如果目前狀態是 1，就維持 1 並記錄正常出貨；如果目前狀態是 0，就把狀態改成 2 並留下未授權事件。</div>
+            <div class="helper">狀態 1 → 維持 1 記正常出貨；狀態 0 → 改成 2 並留下未授權事件。閘門不記操作人員。</div>
             <button class="btn btn-accent mt-3 w-100" type="submit">過閘門</button>
           </form>
         </div>
@@ -289,7 +385,7 @@
 
     <section class="table-panel mb-4">
       <div class="section-title">
-        <h4>庫存彙總（依物件名稱與顏色分組）</h4>
+        <h4>庫存彙總（依物件名稱、顏色與尺寸分組）</h4>
         <a class="helper text-decoration-none" href="{{ url_for('main.details', topic='grouped-inventory') }}">看完整細節 →</a>
       </div>
       <div class="table-responsive">
@@ -298,6 +394,7 @@
             <tr>
               <th>物件名稱</th>
               <th>顏色</th>
+              <th>尺寸</th>
               <th>總數</th>
               <th>庫存中</th>
               <th>已售出</th>
@@ -319,8 +416,8 @@
                 <tr>
                   <th>ID</th>
                   <th>流水號</th>
-                  <th>物件 / 顏色</th>
-                  <th>狀態變化</th>
+                  <th>店員 / 會員</th>
+                  <th>時間</th>
                 </tr>
               </thead>
               <tbody id="counter-table-body"></tbody>
@@ -338,8 +435,9 @@
                 <tr>
                   <th>ID</th>
                   <th>流水號</th>
-                  <th>物件 / 顏色</th>
+                  <th>物件 / 尺寸</th>
                   <th>結果</th>
+                  <th>時間</th>
                 </tr>
               </thead>
               <tbody id="gate-table-body"></tbody>
@@ -352,11 +450,17 @@
 
   <script>
     const feedbackEl = document.getElementById('feedback');
+    const employeeForm = document.getElementById('employee-form');
+    const customerForm = document.getElementById('customer-form');
     const itemForm = document.getElementById('item-form');
+    const searchForm = document.getElementById('search-form');
     const counterForm = document.getElementById('counter-form');
     const gateForm = document.getElementById('gate-form');
     const unauthorizedAlertDot = document.getElementById('unauthorized-alert-dot');
     const resetSystemButton = document.getElementById('reset-system-button');
+    const searchResultBox = document.getElementById('search-result');
+
+    let customerCache = [];
 
     function showMessage(message, isError = false) {
       feedbackEl.textContent = message;
@@ -368,6 +472,15 @@
 
     function badge(label, tone) {
       return `<span class="badge-soft tone-${tone}">${label}</span>`;
+    }
+
+    function formatTime(value) {
+      if (!value) return '-';
+      return value.replace('T', ' ').slice(0, 19);
+    }
+
+    function sizeText(value) {
+      return value ? value : '—';
     }
 
     async function fetchJson(url, options = {}) {
@@ -390,7 +503,10 @@
         'sold_count',
         'unauthorized_count',
         'counter_log_count',
-        'gate_log_count'
+        'gate_log_count',
+        'employee_count',
+        'customer_count',
+        'search_log_count'
       ].forEach((key) => {
         const el = document.getElementById(key);
         if (el) el.textContent = summary[key] ?? 0;
@@ -403,6 +519,32 @@
       }
     }
 
+    function fillSelect(select, options, placeholder) {
+      if (!select) return;
+      const previous = select.value;
+      select.innerHTML =
+        `<option value="" disabled ${previous ? '' : 'selected'}>${placeholder}</option>` +
+        options.map((opt) => `<option value="${opt.value}">${opt.label}</option>`).join('');
+      if (previous && options.some((opt) => String(opt.value) === previous)) {
+        select.value = previous;
+      }
+    }
+
+    async function loadEmployees() {
+      const employees = await fetchJson('/api/v1.0/employees');
+      const options = employees.map((e) => ({ value: e.employee_id, label: e.name }));
+      fillSelect(document.getElementById('counter-employee'), options, '請選擇店員');
+      fillSelect(document.getElementById('search-employee'), options, '請選擇店員');
+    }
+
+    async function loadCustomers() {
+      const customers = await fetchJson('/api/v1.0/customers');
+      customerCache = customers;
+      const options = customers.map((c) => ({ value: c.customer_id, label: `${c.name}（慣用 ${c.preferred_size}）` }));
+      fillSelect(document.getElementById('counter-customer'), options, '請選擇會員');
+      fillSelect(document.getElementById('search-customer'), options, '請選擇會員');
+    }
+
     async function loadGroupedInventory() {
       const rows = await fetchJson('/api/v1.0/inventory-groups');
       const body = document.getElementById('grouped-table-body');
@@ -410,6 +552,7 @@
         <tr>
           <td>${row.item_name}</td>
           <td>${row.color}</td>
+          <td>${sizeText(row.size)}</td>
           <td>${row.total_count}</td>
           <td>${row.in_stock_count}</td>
           <td>${row.sold_count}</td>
@@ -425,8 +568,8 @@
         <tr>
           <td>${row.counter_log_id}</td>
           <td><code>${row.serial_number}</code></td>
-          <td>${row.item_name}<div class="helper">${row.color}</div></td>
-          <td>${row.previous_status_label} → ${row.new_status_label}</td>
+          <td>${row.employee_name ?? '-'}<div class="helper">→ ${row.customer_name ?? '-'}</div></td>
+          <td class="helper">${formatTime(row.timestamp)}</td>
         </tr>
       `).join('');
     }
@@ -438,19 +581,66 @@
         <tr>
           <td>${row.gate_log_id}</td>
           <td><code>${row.serial_number}</code></td>
-          <td>${row.item_name}<div class="helper">${row.color}</div></td>
+          <td>${row.item_name}<div class="helper">${row.color}／${sizeText(row.size)}</div></td>
           <td>
             ${badge(row.result_label, row.result)}
             ${row.is_unread ? `<span class="badge-soft tone-unread ms-2">未讀</span>` : ''}
-            <div class="helper mt-1">${row.previous_status_label} → ${row.new_status_label}</div>
           </td>
+          <td class="helper">${formatTime(row.timestamp)}</td>
         </tr>
       `).join('');
     }
 
     async function refreshAll() {
-      await Promise.all([loadSummary(), loadGroupedInventory(), loadCounterLogs(), loadGateLogs()]);
+      await Promise.all([
+        loadSummary(),
+        loadEmployees(),
+        loadCustomers(),
+        loadGroupedInventory(),
+        loadCounterLogs(),
+        loadGateLogs()
+      ]);
     }
+
+    // 選會員 → 自動帶入慣用尺寸
+    document.getElementById('search-customer').addEventListener('change', (event) => {
+      const customer = customerCache.find((c) => String(c.customer_id) === event.target.value);
+      if (customer) {
+        document.getElementById('search-size').value = customer.preferred_size;
+      }
+    });
+
+    employeeForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const payload = Object.fromEntries(new FormData(employeeForm).entries());
+      try {
+        const result = await fetchJson('/api/v1.0/employees', {
+          method: 'POST',
+          body: JSON.stringify(payload)
+        });
+        showMessage(`已新增員工：${result.name}`);
+        employeeForm.reset();
+        await Promise.all([loadSummary(), loadEmployees()]);
+      } catch (error) {
+        showMessage(error.message, true);
+      }
+    });
+
+    customerForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const payload = Object.fromEntries(new FormData(customerForm).entries());
+      try {
+        const result = await fetchJson('/api/v1.0/customers', {
+          method: 'POST',
+          body: JSON.stringify(payload)
+        });
+        showMessage(`已新增會員：${result.name}（慣用 ${result.preferred_size}）`);
+        customerForm.reset();
+        await Promise.all([loadSummary(), loadCustomers()]);
+      } catch (error) {
+        showMessage(error.message, true);
+      }
+    });
 
     itemForm.addEventListener('submit', async (event) => {
       event.preventDefault();
@@ -468,6 +658,45 @@
       }
     });
 
+    searchForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const payload = Object.fromEntries(new FormData(searchForm).entries());
+      try {
+        const result = await fetchJson('/api/v1.0/inventory-search', {
+          method: 'POST',
+          body: JSON.stringify(payload)
+        });
+        searchResultBox.classList.remove('hidden');
+        const sizeLabel = result.queried_size ? `${result.queried_size} 號` : '（不限尺寸）';
+        const queriedAt = `<div class="helper mb-2">查詢時間：${formatTime(result.search_log.timestamp)}</div>`;
+        if (result.result_count === 0) {
+          searchResultBox.innerHTML =
+            queriedAt + `目前沒有符合 <strong>${sizeLabel}</strong> 的庫存中商品。`;
+        } else {
+          const list = result.results.map((item) => `
+            <tr>
+              <td><code>${item.serial_number}</code></td>
+              <td>${item.item_name}</td>
+              <td>${item.color}</td>
+              <td>${sizeText(item.size)}</td>
+            </tr>
+          `).join('');
+          searchResultBox.innerHTML = queriedAt + `
+            <div class="mb-2">符合 <strong>${sizeLabel}</strong> 的在庫商品共 <strong>${result.result_count}</strong> 件：</div>
+            <div class="table-responsive">
+              <table class="table table-sm align-middle mb-0">
+                <thead><tr><th>流水號</th><th>物件</th><th>顏色</th><th>尺寸</th></tr></thead>
+                <tbody>${list}</tbody>
+              </table>
+            </div>`;
+        }
+        showMessage(`查詢完成：${sizeLabel} 找到 ${result.result_count} 件`);
+        await Promise.all([loadSummary()]);
+      } catch (error) {
+        showMessage(error.message, true);
+      }
+    });
+
     counterForm.addEventListener('submit', async (event) => {
       event.preventDefault();
       const payload = Object.fromEntries(new FormData(counterForm).entries());
@@ -476,7 +705,7 @@
           method: 'POST',
           body: JSON.stringify(payload)
         });
-        showMessage(`櫃檯完成：${result.serial_number} 已設成 ${result.new_status_label}`);
+        showMessage(`櫃檯完成：${result.serial_number} 由 ${result.employee_name} 賣給 ${result.customer_name}，狀態 ${result.new_status_label}`);
         counterForm.reset();
         await refreshAll();
       } catch (error) {
@@ -502,7 +731,7 @@
 
     resetSystemButton.addEventListener('click', async () => {
       const confirmed = window.confirm(
-        '確定要把版本 E 的主表、櫃檯日記、閘門日記全部清空嗎？\\n這會讓系統回到真正從零開始的狀態。'
+        '確定要把版本 E 的所有資料（物品、員工、會員、櫃檯／閘門／查詢日記）全部清空嗎？\\n這會讓系統回到真正從零開始的狀態。'
       );
       if (!confirmed) return;
 
@@ -511,9 +740,12 @@
           method: 'POST',
           body: JSON.stringify({})
         });
+        employeeForm.reset();
+        customerForm.reset();
         itemForm.reset();
         counterForm.reset();
         gateForm.reset();
+        searchResultBox.classList.add('hidden');
         showMessage(result.message);
         await refreshAll();
       } catch (error) {

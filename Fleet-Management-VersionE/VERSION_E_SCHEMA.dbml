@@ -1,7 +1,22 @@
+Table employees {
+  employee_id int [pk, increment]
+  name varchar(80) [not null]
+  created_at datetime [not null]
+}
+
+Table customers {
+  customer_id int [pk, increment]
+  name varchar(80) [not null]
+  preferred_size varchar(20) [not null, note: '會員單一慣用尺寸']
+  phone varchar(40)
+  created_at datetime [not null]
+}
+
 Table inventory_items {
   serial_number varchar(64) [pk]
   item_name varchar(120) [not null]
   color varchar(60) [not null]
+  size varchar(20) [null, note: '選填，配件類商品可空']
   status_code int [not null, default: 0, note: '0=in stock, 1=sold, 2=unauthorized']
   created_at datetime [not null]
   updated_at datetime [not null]
@@ -10,9 +25,10 @@ Table inventory_items {
 Table counter_logs {
   counter_log_id int [pk, increment]
   serial_number varchar(64) [not null, ref: > inventory_items.serial_number]
+  employee_id int [not null, ref: > employees.employee_id, note: '哪位店員結帳']
+  customer_id int [not null, ref: > customers.customer_id, note: '賣給哪位會員']
   previous_status int [not null]
   new_status int [not null]
-  operator varchar(80) [not null]
   note varchar(255)
   timestamp datetime [not null]
 }
@@ -25,5 +41,15 @@ Table gate_logs {
   new_status int [not null]
   note varchar(255)
   is_unread boolean [not null, default: false]
+  timestamp datetime [not null]
+}
+
+Table search_logs {
+  search_log_id int [pk, increment]
+  employee_id int [not null, ref: > employees.employee_id, note: '哪位店員操作查詢']
+  customer_id int [not null, ref: > customers.customer_id, note: '替哪位會員查詢']
+  queried_size varchar(20) [null, note: '選填，留空＝不限尺寸']
+  queried_item_name varchar(120)
+  result_count int [not null, default: 0]
   timestamp datetime [not null]
 }

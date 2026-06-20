@@ -1,8 +1,17 @@
 from flask import abort, render_template
-from sqlalchemy import func
+from sqlalchemy import case, func
 
 from app import db
-from app.models import GATE_RESULT_LABELS, STATUS_LABELS, CounterLog, GateLog, InventoryItem
+from app.models import (
+    GATE_RESULT_LABELS,
+    STATUS_LABELS,
+    CounterLog,
+    Customer,
+    Employee,
+    GateLog,
+    InventoryItem,
+    SearchLog,
+)
 
 from . import main
 
@@ -10,7 +19,7 @@ from . import main
 DETAIL_TOPICS = {
     'items': {
         'title': '物品主表',
-        'subtitle': '查看每一件單品的流水號、物件名稱、顏色與目前狀態。',
+        'subtitle': '查看每一件單品的流水號、物件名稱、顏色、尺寸與目前狀態。',
         'table_type': 'items',
         'empty_message': '目前沒有任何物品。',
     },
@@ -46,9 +55,27 @@ DETAIL_TOPICS = {
     },
     'grouped-inventory': {
         'title': '庫存彙總',
-        'subtitle': '依據物件名稱與顏色分組，回報所有可能組合的數量分布。',
+        'subtitle': '依據物件名稱、顏色與尺寸分組，回報所有可能組合的數量分布。',
         'table_type': 'grouped-inventory',
         'empty_message': '目前沒有可供彙總的物品資料。',
+    },
+    'employees': {
+        'title': '員工名單',
+        'subtitle': '查看所有可在櫃檯結帳或操作查詢的員工。',
+        'table_type': 'employees',
+        'empty_message': '目前沒有任何員工。',
+    },
+    'customers': {
+        'title': '會員名單',
+        'subtitle': '查看所有會員與其慣用尺寸。',
+        'table_type': 'customers',
+        'empty_message': '目前沒有任何會員。',
+    },
+    'search-logs': {
+        'title': '會員查詢紀錄',
+        'subtitle': '查看店員替會員查詢尺寸的所有互動，包含查詢時間與找到幾件在庫。',
+        'table_type': 'search-logs',
+        'empty_message': '目前沒有任何查詢紀錄。',
     },
 }
 
@@ -58,13 +85,18 @@ def grouped_inventory_rows():
         db.session.query(
             InventoryItem.item_name.label('item_name'),
             InventoryItem.color.label('color'),
+            InventoryItem.size.label('size'),
             func.count(InventoryItem.serial_number).label('total_count'),
-            func.sum(func.if_(InventoryItem.status_code == 0, 1, 0)).label('in_stock_count'),
-            func.sum(func.if_(InventoryItem.status_code == 1, 1, 0)).label('sold_count'),
-            func.sum(func.if_(InventoryItem.status_code == 2, 1, 0)).label('unauthorized_count'),
+            func.sum(case((InventoryItem.status_code == 0, 1), else_=0)).label('in_stock_count'),
+            func.sum(case((InventoryItem.status_code == 1, 1), else_=0)).label('sold_count'),
+            func.sum(case((InventoryItem.status_code == 2, 1), else_=0)).label('unauthorized_count'),
         )
-        .group_by(InventoryItem.item_name, InventoryItem.color)
-        .order_by(InventoryItem.item_name.asc(), InventoryItem.color.asc())
+        .group_by(InventoryItem.item_name, InventoryItem.color, InventoryItem.size)
+        .order_by(
+            InventoryItem.item_name.asc(),
+            InventoryItem.color.asc(),
+            InventoryItem.size.asc(),
+        )
         .all()
     )
 
@@ -72,6 +104,7 @@ def grouped_inventory_rows():
         {
             'item_name': row.item_name,
             'color': row.color,
+            'size': row.size,
             'total_count': int(row.total_count or 0),
             'in_stock_count': int(row.in_stock_count or 0),
             'sold_count': int(row.sold_count or 0),
@@ -113,6 +146,12 @@ def get_detail_context(topic):
         rows = [log.to_dict() for log in CounterLog.query.order_by(CounterLog.timestamp.desc()).all()]
     elif topic == 'gate-logs':
         rows = [log.to_dict() for log in GateLog.query.order_by(GateLog.timestamp.desc()).all()]
+    elif topic == 'employees':
+        rows = [employee.to_dict() for employee in Employee.query.order_by(Employee.employee_id.asc()).all()]
+    elif topic == 'customers':
+        rows = [customer.to_dict() for customer in Customer.query.order_by(Customer.customer_id.asc()).all()]
+    elif topic == 'search-logs':
+        rows = [log.to_dict() for log in SearchLog.query.order_by(SearchLog.timestamp.desc()).all()]
     else:
         rows = grouped_inventory_rows()
 

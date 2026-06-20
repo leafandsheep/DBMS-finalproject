@@ -1,122 +1,46 @@
-# Warehouse Management System - Version E
+# Warehouse Management System｜第五版本 E（最終版）
 
-這個版本是第五版本 E，核心回到單件追蹤。
+單件流水號倉庫系統，加入**員工、會員、尺寸與查詢紀錄**的零售門市 + RFID 防盜情境。
 
-## 版本 E 核心規則
+> 想快速了解整個專案，先看 **[PROJECT_OVERVIEW.md](./PROJECT_OVERVIEW.md)**。
 
-- 每一件物品都有獨立流水號 `serial_number`
-- 主表一定包含：
-  - 物件名稱 `item_name`
-  - 顏色 `color`
-  - 流水號 `serial_number`
-  - 狀態碼 `status_code`
-- 狀態碼定義：
-  - `0` = 庫存中
-  - `1` = 已售出
-  - `2` = 未授權
-- 建立物品時狀態預設為 `0`
+## 核心特色
 
-## 流程
+- 每件商品都有獨立流水號（`SN-000001`…）與尺寸
+- 狀態碼：`0` 庫存中 → `1` 已售出 → `2` 未授權
+- 店員（員工）替會員查「有沒有他尺寸的商品」，留下查詢紀錄
+- 結帳記錄「哪位店員賣給哪位會員」
+- 閘門自動判定正常 / 未授權，未授權維持不歸屬到人
+- 每個事件（結帳 / 閘門 / 查詢）都有時間
+- 庫存彙總依「名稱＋顏色＋尺寸」即時分組計算
 
-### 正常流程
+## 6 張資料表
 
-1. 物品先經過櫃檯
-2. 櫃檯把該流水號狀態從 `0` 設成 `1`
-3. 之後物品經過閘門
-4. 閘門查這個流水號是否為 `1`
-5. 如果是 `1`，就維持 `1` 並記錄正常出貨日記
+`employees`、`customers`、`inventory_items`、`counter_logs`、`gate_logs`、`search_logs`
 
-### 異常流程
+完整設計（所有 schema、ER 圖、使用場景、所有可能情境）請看：
+👉 **[VERSION_E_ARCHITECTURE.md](./VERSION_E_ARCHITECTURE.md)**
 
-1. 物品沒有先經過櫃檯
-2. 直接經過閘門
-3. 閘門查到這個流水號目前是 `0`
-4. 系統把狀態改成 `2`
-5. 在未授權按鈕內可以查看對應的閘門日記
-6. 主頁會顯示未讀驚嘆號 `!`
-
-## 主要資料表
-
-### `inventory_items`
-
-物品主表。
-
-重要欄位：
-
-- `serial_number`
-- `item_name`
-- `color`
-- `status_code`
-
-### `counter_logs`
-
-櫃檯日記，代表正常出貨前的櫃檯處理。
-
-重要欄位：
-
-- `counter_log_id`
-- `serial_number`
-- `previous_status`
-- `new_status`
-- `operator`
-- `note`
-
-### `gate_logs`
-
-閘門日記，代表物品經過閘門的檢查結果。
-
-重要欄位：
-
-- `gate_log_id`
-- `serial_number`
-- `result`
-- `previous_status`
-- `new_status`
-- `note`
-- `is_unread`
-
-## 庫存彙總
-
-除了主表以外，版本 E 還提供一個彙總視角：
-
-- 依據 `item_name + color` 分組
-- 回報：
-  - 總數
-  - 庫存中數量
-  - 已售出數量
-  - 未授權數量
-
-這個彙總不是獨立資料表，而是由主表 group 後即時計算。
-
-## 啟動方式
-
-1. 建立環境
+## 快速啟動（本機 Docker MySQL，port 3307）
 
 ```bash
-conda env create -f environment.yml
+cd /Users/thenights/Downloads/大二所有學科/大二資料庫/資料庫專案/Fleet-Management-VersionE
+
+# 1. 啟動 MySQL（Docker）
+docker compose up -d mysql        # 第一次；之後用 docker start warehouse_mysql
+
+# 2. 重建資料庫
+mysql -h 127.0.0.1 -P 3307 -u root -proot -e "DROP DATABASE IF EXISTS warehouse_management; CREATE DATABASE warehouse_management CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+mysql -h 127.0.0.1 -P 3307 -u root -proot warehouse_management < warehouse_management.sql
+
+# 3. 啟動 Flask
 conda activate warehouse-management
+FLASK_CONFIG=production CONFIG_FILE=./local_docker_mysql.ini \
+  python -c "from app import create_app; create_app('production').run(host='127.0.0.1', port=5001, debug=False, use_reloader=False)"
 ```
 
-2. 重建資料庫
+開啟 http://127.0.0.1:5001
 
-```bash
-mysql -u root -p -e "DROP DATABASE IF EXISTS warehouse_management; CREATE DATABASE warehouse_management CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
-mysql -u root -p warehouse_management < warehouse_management.sql
-```
+> 註：API 都掛在 `/api/v1.0` 前綴下（例如 `/api/v1.0/summary`）。完整端點清單見 [VERSION_E_ARCHITECTURE.md](./VERSION_E_ARCHITECTURE.md) 第七節。
 
-3. 啟動 Flask
-
-```bash
-MYSQL_HOST=127.0.0.1 MYSQL_PORT=3306 MYSQL_USER=warehouse_user MYSQL_PASSWORD=warehouse_pass_123 DB_NAME=warehouse_management CONFIG_FILE=./default_config.ini python manage.py runserver -h 0.0.0.0 -p 5001
-```
-
-4. 開啟頁面
-
-- 主控台：
-  - `http://localhost:5001`
-
-更完整的第五版本 E 設計說明請看：
-[VERSION_E_ARCHITECTURE.md](/Users/thenights/Downloads/大二所有學科/大二資料庫/資料庫專案/Fleet-Management-VersionE/VERSION_E_ARCHITECTURE.md)
-
-如果你要看 schema 圖原始碼，或貼到 `dbdiagram.io` 產生圖，請看：
-[VERSION_E_SCHEMA.dbml](/Users/thenights/Downloads/大二所有學科/大二資料庫/資料庫專案/Fleet-Management-VersionE/VERSION_E_SCHEMA.dbml)
+更詳細、可直接複製的指令請看 [VERSION_E_OPERATION_COMMANDS.md](./VERSION_E_OPERATION_COMMANDS.md)。
