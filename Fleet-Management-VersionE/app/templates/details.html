@@ -150,6 +150,7 @@
               <th>流水號</th>
               <th>物件名稱</th>
               <th>顏色</th>
+              <th>尺寸</th>
               <th>狀態</th>
             </tr>
           </thead>
@@ -159,6 +160,7 @@
               <td><code>{{ row.serial_number }}</code></td>
               <td>{{ row.item_name }}</td>
               <td>{{ row.color }}</td>
+              <td>{{ row.size or '—' }}</td>
               <td><span class="badge-soft tone-{{ row.status_tone }}">{{ row.status_label }}</span></td>
             </tr>
             {% endfor %}
@@ -168,9 +170,11 @@
             <tr>
               <th>ID</th>
               <th>流水號</th>
-              <th>物件 / 顏色</th>
+              <th>物件 / 顏色 / 尺寸</th>
               <th>狀態變化</th>
-              <th>操作者</th>
+              <th>店員</th>
+              <th>會員</th>
+              <th>時間</th>
               <th>說明</th>
             </tr>
           </thead>
@@ -179,9 +183,11 @@
             <tr>
               <td>{{ row.counter_log_id }}</td>
               <td><code>{{ row.serial_number }}</code></td>
-              <td>{{ row.item_name }}<div class="helper">{{ row.color }}</div></td>
+              <td>{{ row.item_name }}<div class="helper">{{ row.color }}／{{ row.size or '—' }}</div></td>
               <td>{{ row.previous_status_label }} → {{ row.new_status_label }}</td>
-              <td>{{ row.operator }}</td>
+              <td>{{ row.employee_name }}<div class="helper">#{{ row.employee_id }}</div></td>
+              <td>{{ row.customer_name }}<div class="helper">#{{ row.customer_id }}</div></td>
+              <td class="helper">{{ row.timestamp }}</td>
               <td>{{ row.note or '-' }}</td>
             </tr>
             {% endfor %}
@@ -191,9 +197,10 @@
             <tr>
               <th>ID</th>
               <th>流水號</th>
-              <th>物件 / 顏色</th>
+              <th>物件 / 顏色 / 尺寸</th>
               <th>結果</th>
               <th>狀態變化</th>
+              <th>時間</th>
               <th>說明</th>
             </tr>
           </thead>
@@ -202,7 +209,7 @@
             <tr>
               <td>{{ row.gate_log_id }}</td>
               <td><code>{{ row.serial_number }}</code></td>
-              <td>{{ row.item_name }}<div class="helper">{{ row.color }}</div></td>
+              <td>{{ row.item_name }}<div class="helper">{{ row.color }}／{{ row.size or '—' }}</div></td>
               <td>
                 <span class="badge-soft tone-{{ row.result }}">{{ row.result_label }}</span>
                 {% if row.is_unread %}
@@ -210,7 +217,71 @@
                 {% endif %}
               </td>
               <td>{{ row.previous_status_label }} → {{ row.new_status_label }}</td>
+              <td class="helper">{{ row.timestamp }}</td>
               <td>{{ row.note or '-' }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+          {% elif table_type == 'employees' %}
+          <thead>
+            <tr>
+              <th>員工編號</th>
+              <th>姓名</th>
+              <th>建立時間</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in rows %}
+            <tr>
+              <td>#{{ row.employee_id }}</td>
+              <td>{{ row.name }}</td>
+              <td class="helper">{{ row.created_at }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+          {% elif table_type == 'customers' %}
+          <thead>
+            <tr>
+              <th>會員編號</th>
+              <th>姓名</th>
+              <th>慣用尺寸</th>
+              <th>電話</th>
+              <th>建立時間</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in rows %}
+            <tr>
+              <td>#{{ row.customer_id }}</td>
+              <td>{{ row.name }}</td>
+              <td><span class="badge-soft tone-sold">{{ row.preferred_size }}</span></td>
+              <td>{{ row.phone or '-' }}</td>
+              <td class="helper">{{ row.created_at }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+          {% elif table_type == 'search-logs' %}
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>店員</th>
+              <th>會員</th>
+              <th>查詢尺寸</th>
+              <th>限定物件</th>
+              <th>找到件數</th>
+              <th>查詢時間</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in rows %}
+            <tr>
+              <td>{{ row.search_log_id }}</td>
+              <td>{{ row.employee_name }}<div class="helper">#{{ row.employee_id }}</div></td>
+              <td>{{ row.customer_name }}<div class="helper">#{{ row.customer_id }}</div></td>
+              <td><span class="badge-soft tone-sold">{{ row.queried_size or '不限' }}</span></td>
+              <td>{{ row.queried_item_name or '不限' }}</td>
+              <td>{{ row.result_count }}</td>
+              <td class="helper">{{ row.timestamp }}</td>
             </tr>
             {% endfor %}
           </tbody>
@@ -219,6 +290,7 @@
             <tr>
               <th>物件名稱</th>
               <th>顏色</th>
+              <th>尺寸</th>
               <th>總數</th>
               <th>庫存中</th>
               <th>已售出</th>
@@ -230,6 +302,7 @@
             <tr>
               <td>{{ row.item_name }}</td>
               <td>{{ row.color }}</td>
+              <td>{{ row.size or '—' }}</td>
               <td>{{ row.total_count }}</td>
               <td>{{ row.in_stock_count }}</td>
               <td>{{ row.sold_count }}</td>
